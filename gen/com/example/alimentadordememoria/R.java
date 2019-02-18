@@ -11,10 +11,11 @@ public final class R {
     public static final class attr {
     }
     public static final class id {
-        public static final int button1=0x7f070003;
+        public static final int button1=0x7f070004;
+        public static final int deletar=0x7f070002;
         public static final int editText1=0x7f070001;
-        public static final int ideia=0x7f070002;
-        public static final int item1=0x7f070004;
+        public static final int ideia=0x7f070003;
+        public static final int item1=0x7f070005;
         public static final int linearLayout=0x7f070000;
     }
     public static final class layout {

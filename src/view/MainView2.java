@@ -13,7 +13,7 @@ import controller.MainControl;
 
 public class MainView2 extends Activity{
 	EditText txtIdeia;
-	Button btnInserir;
+	Button btnInserir, btnDeletar;
 	MainControl mc;
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -22,7 +22,7 @@ public class MainView2 extends Activity{
 		final Context context = this.getApplicationContext();//pega o contexto desta View
 		txtIdeia = (EditText)findViewById(R.id.ideia);//conecta o EditText à variável txtIdeia
 		btnInserir = (Button)findViewById(R.id.button1);//conecta o Button à variável btnInserir
-		
+		btnDeletar = (Button)findViewById(R.id.deletar);//conecta o Button à variável btnDeletar
 		
 		btnInserir.setOnClickListener(new View.OnClickListener() {
 			
@@ -32,7 +32,7 @@ public class MainView2 extends Activity{
 				mc.abrirConexao();//abre a conexão com o banco
 				String ideia = txtIdeia.getText().toString();//adiciona o texto adicionado pelo usuário na variável ideia
 				if(!ideia.equals("")){ //se ideia não for ""
-					Long l =mc.inserirDB(ideia, "memoria");  //insere no DB a string ideia na tabela memoria
+					Long l =mc.inserirRow(ideia, "memoria");  //insere no DB a string ideia na tabela memoria
 					if(l>-1){ //se o método anterior retornar um valor maior que -1
 						Toast.makeText(context, "Ideia Salva!", Toast.LENGTH_SHORT).show();
 					}else{
@@ -41,6 +41,28 @@ public class MainView2 extends Activity{
 				}
 				mc.fecharConexao(); //fecha a conexão
 				txtIdeia.setText("");//limpa a tela				
+			}
+		});
+		
+		btnDeletar.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				mc = new MainControl(context);//instancia um MainControl com o contexto atual
+				mc.abrirConexao();//abre a conexão com o banco
+				String ideia = txtIdeia.getText().toString();//adiciona o texto adicionado pelo usuário na variável ideia
+				if(!ideia.equals("")){ //se ideia não for ""
+					Boolean l =mc.deletarRow(ideia, "memoria");  //delete no DB a string ideia na tabela memoria
+					if(l){ //se return true
+						Toast.makeText(context, "Ideia Removida!", Toast.LENGTH_SHORT).show();
+					}else{
+						Toast.makeText(context, "Ideia Não Removida!", Toast.LENGTH_SHORT).show();
+					}
+				}
+				mc.fecharConexao(); //fecha a conexão
+				txtIdeia.setText("");//limpa a tela				
+
 			}
 		});
 		

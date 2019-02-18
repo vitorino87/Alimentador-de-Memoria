@@ -96,9 +96,14 @@ public class MainControl {
 		return b;
 	}
 	
-	public void goToResult(int position){		
-		c.moveToPosition(position);		
-	}
+	//public String currentResult(){		
+	//	String b="";	
+	//	if(c.isLast()){
+	//		c.moveToPrevious();			
+	//	}
+	//	b = c.getString(1);								
+	//	return b;
+	//}
 	
 	public String previousResult(){
 		String b="";
@@ -112,10 +117,18 @@ public class MainControl {
 		return b;
 	}
 	
-	public Long inserirDB(String valor, String tabela){
+	public Long inserirRow(String valor, String tabela){
 		ContentValues cv = new ContentValues();
 		cv.put("ideia", valor);
 		Long a = banco.inserir(db, cv, tabela);
 		return a;
+	}
+	
+	public boolean deletarRow(String ideia, String tabela){
+		if(banco.deletarIdeia(ideia, db, tabela)>0){
+			return true;
+		}{
+			return false;
+		}
 	}
 }

@@ -120,4 +120,13 @@ public class Banco extends SQLiteOpenHelper
 		return c;
 	}
 	
+	public int deletarIdeia(String ideia, SQLiteDatabase db, String tabela){
+		int a=-2;
+		String[] ideias ={ideia};
+		if(!ideia.equals("")){
+			a = db.delete(tabela, "ideia like ?",ideias);
+		}		
+		return a;
+	}
+	
 }

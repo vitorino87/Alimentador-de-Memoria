@@ -72,26 +72,36 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	 * Método para carregar a ideia no EditText
 	 */
 	public static void carregarIdeia(){
-		String b = mc.nextResult();
-		ideia.setText(b);
+		try{
+			String b = mc.nextResult();
+			ideia.setText(b);
+		}catch(Exception ex){			
+		}		
 	}
 		
 	/**
 	 * Método para carregar a 1ª ideia no EditText
 	 */
 	public static void carregarFirst(){
-		String b = mc.initialResult();
-		ideia.setText(b);
+		try{
+			String b = mc.initialResult();
+			ideia.setText(b);
+		}catch(Exception ex){			
+		}
 	}
 	
 	/**
 	 * Método para carregar a ideia no EditText
 	 */
 	public static void carregarIdeiaAnterior(){
-		String b = mc.previousResult();
-		if(!b.equals(""))
-			ideia.setText(b);
-	}		
+		try{
+			String b = mc.previousResult();
+			if(!b.equals(""))
+				ideia.setText(b);
+		}catch(Exception ex){			
+		}		
+	}
+		
 	
 	/**Explicação:
 	 * Método executado ao tocar em algum item do menu
@@ -161,7 +171,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			mc.abrirConexao();			
 			if(mc.checarPosition()){ //método para checar a posição do Cursor
 				//método que faz select e atualiza o Cursor
-				mc.atualizarCursorAposInserirIdeia("memoria");
+				mc.atualizarCursorAposInserirIdeia("memoria");				
 			}
 			//loadIdeias();
 		}catch(Exception ex){
