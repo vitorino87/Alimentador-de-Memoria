@@ -19,6 +19,7 @@ public abstract class TelaAux extends MainView{
 		// TODO Auto-generated method stub
 		//System.out.println("Fui para esquerda");
 		carregarIdeia();
+		mudarACor();
 	}
 
 	/**
@@ -28,5 +29,6 @@ public abstract class TelaAux extends MainView{
 		// TODO Auto-generated method stub
 		//System.out.println("Fui para direita");
 		carregarIdeiaAnterior();
+		mudarACor();
 	}		
 }

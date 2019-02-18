@@ -4,15 +4,21 @@ import com.example.alimentadordememoria.R;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnKeyListener;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.method.KeyListener;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import controller.EditWatcher;
 import controller.MainControl;
 
 public class MainView2 extends Activity{
-	EditText txtIdeia;
+	public static EditText txtIdeia;
 	Button btnInserir, btnDeletar;
 	MainControl mc;
 	@Override
@@ -65,6 +71,11 @@ public class MainView2 extends Activity{
 
 			}
 		});
+		
+		//métodos para trabalhar com EditText quando alguma tecla foi teclada
+		//EditWatcher ew = new EditWatcher();				
+		//txtIdeia.addTextChangedListener(ew);
+		
 		
 	}
 	
@@ -128,6 +139,5 @@ public class MainView2 extends Activity{
 		}catch(Exception ex){
 			
 		}
-	}
-	
+	}	
 }

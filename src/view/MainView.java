@@ -1,9 +1,13 @@
 package view;
 
+import java.util.Random;
+
 import com.example.alimentadordememoria.R;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -190,5 +194,12 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		}catch(Exception ex){
 			
 		}
+	}
+	
+	@SuppressLint("DefaultLocale")
+	public static void mudarACor() {
+		Random random = new Random();
+		String id = String.format("%06d", random.nextInt(999999));
+		ideia.setTextColor(Color.parseColor("#" + id));		
 	}
 }
