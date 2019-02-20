@@ -19,6 +19,7 @@ import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import controller.GuardadorDeEstados;
 import controller.MainControl;
 import controller.TelaAux;
 
@@ -105,6 +106,15 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		}catch(Exception ex){			
 		}		
 	}
+	
+	public static void carregarIdeia(int posicao){
+		try{
+			String b = mc.currentResult(posicao); 
+			ideia.setText(b);
+		}catch(Exception ex){
+			
+		}
+	}
 		
 	
 	/**Explicação:
@@ -132,6 +142,9 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	@Override
 	protected void onPause(){
 		super.onPause();
+		int posicao = mc.armazenarPositionDoCursor();
+		GuardadorDeEstados gd = new GuardadorDeEstados();
+		gd.guardarEstado("posicao", posicao, this);
 		try{
 
 		}catch(Exception ex){
@@ -176,6 +189,11 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			if(mc.checarPosition()){ //método para checar a posição do Cursor
 				//método que faz select e atualiza o Cursor
 				mc.atualizarCursorAposInserirIdeia("memoria");				
+			}
+			GuardadorDeEstados gd = new GuardadorDeEstados();	
+			int a = gd.restaurarEstado("posicao", this);
+			if(a!=-1){
+				carregarIdeia(a);
 			}
 			//loadIdeias();
 		}catch(Exception ex){
