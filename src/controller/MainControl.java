@@ -14,18 +14,23 @@ public class MainControl {
 	Boolean previous=false;
 	int position=-1;	
 	
-	public void armazenarPositionDoCursor(){
+	public int armazenarPositionDoCursor(){
 		position = c.getPosition();
+		return position;
 	}
 
-	public void setPositionOfCursor() {
+	public void goToPositionCursor() {
 		c.moveToPosition(position);		
+	}
+	
+	public void goToPositionCursor(int posicao){
+		c.moveToPosition(posicao);
 	}
 	
 	public void atualizarCursorAposInserirIdeia(String tabela){
 		if(position!=-1){
 			retornarTodosResultados(tabela);
-			setPositionOfCursor();
+			goToPositionCursor();
 			position=-1;
 		}
 	}
@@ -96,14 +101,12 @@ public class MainControl {
 		return b;
 	}
 	
-	//public String currentResult(){		
-	//	String b="";	
-	//	if(c.isLast()){
-	//		c.moveToPrevious();			
-	//	}
-	//	b = c.getString(1);								
-	//	return b;
-	//}
+	public String currentResult(int position){		
+		String b="";	
+		c.moveToPosition(position);			
+		b = c.getString(1);								
+		return b;
+	}
 	
 	public String previousResult(){
 		String b="";
