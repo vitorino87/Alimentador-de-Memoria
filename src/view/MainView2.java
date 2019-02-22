@@ -1,12 +1,21 @@
 package view;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
 import com.example.alimentadordememoria.R;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
@@ -18,12 +27,14 @@ import controller.MainControl;
 
 @SuppressLint("NewApi")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
+
 public class MainView2 extends Activity {
 	public static EditText txtIdeia;
 	Button btnInserir, btnDeletar;
 	LinearLayout ll;
 	MainControl mc;
 	int pixelAnterior=0;
+	Button btnExportar,btnImportar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +45,19 @@ public class MainView2 extends Activity {
 		btnInserir = (Button) findViewById(R.id.button1);// conecta o Button à variável btnInserir
 		btnDeletar = (Button) findViewById(R.id.deletar);// conecta o Button à variável btnDeletar
 		ll = (LinearLayout) findViewById(R.id.linearLayout);
+		btnExportar = (Button) findViewById(R.id.btnExportar);
+		btnImportar = (Button) findViewById(R.id.btnImportar);
+		
+		btnExportar.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);				
+				intent.setType("text/csv");
+				startActivityForResult(intent, 1);
+			}
+		});
 
 		btnInserir.setOnClickListener(new View.OnClickListener() {
 
@@ -104,6 +128,39 @@ public class MainView2 extends Activity {
 		//filterArray[2] = new InputFilter.LengthFilter(75);
 		//filterArray[3] = new InputFilter.LengthFilter(100);
 		//txtIdeia.setFilters(filterArray);		
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		switch (requestCode) {
+		case 1:
+			if (resultCode == RESULT_OK) {
+				 ContentResolver cr = null;
+				 try {
+					cr.openFileDescriptor(data.getData(), null);
+				} catch (FileNotFoundException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} 
+				try {
+					ParcelFileDescriptor pfd = cr.openFileDescriptor(data.getData(), null);					
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				String FilePath = data.getData().getPath();
+				try {
+					InputStream is = new FileInputStream(FilePath);					
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// textFile.setText(FilePath);
+			}
+			break;
+
+		}
+
 	}
 	
 	public void setPixelAnterior(int pixel){

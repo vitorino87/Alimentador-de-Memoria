@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class GuardadorDeEstados {
+public class GuardadorDeEstadosTemplate {
 
 	public void guardarEstado(String key, int valor, Activity ac) {		
 		SharedPreferences sharedPref = ac.getPreferences(Context.MODE_PRIVATE);
