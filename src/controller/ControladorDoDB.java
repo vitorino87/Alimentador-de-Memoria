@@ -6,25 +6,25 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import model.Banco;
 
-public class MainControl {
+public class ControladorDoDB {
 
 	protected SQLiteDatabase db;
 	Banco banco = null;
-	Cursor c;
+	Cursor cursor;
 	Boolean previous=false;
 	int position=-1;	
 	
 	public int armazenarPositionDoCursor(){
-		position = c.getPosition();
+		position = cursor.getPosition();
 		return position;
 	}
 
 	public void goToPositionCursor() {
-		c.moveToPosition(position);		
+		cursor.moveToPosition(position);		
 	}
 	
 	public void goToPositionCursor(int posicao){
-		c.moveToPosition(posicao);
+		cursor.moveToPosition(posicao);
 	}
 	
 	public void atualizarCursorAposInserirIdeia(String tabela){
@@ -43,21 +43,21 @@ public class MainControl {
 		}
 	}
 
-	public MainControl(Context context){
+	public ControladorDoDB(Context context){
 		banco = new Banco(context, "Ideias");
 	}
 
 	// Recupera o Cursor máximo
 	public int buscarIdMax() {
-		c = banco.buscarIdMax(db);
-		int a = c.getInt(0);
+		cursor = banco.buscarIdMax(db);
+		int a = cursor.getInt(0);
 		return a;
 	}
 
 	//Retorna o primeiro cursor
 	public Cursor irParaPrimeiroCursor() {
 		Cursor d = null;
-		if (!c.moveToFirst()) {
+		if (!cursor.moveToFirst()) {
 
 		}
 		return d;
@@ -81,40 +81,40 @@ public class MainControl {
 	
 	public void retornarTodosResultados(String tabela){
 		abrirConexao();
-		c = banco.retornarTodosResultados(db, tabela);
+		cursor = banco.retornarTodosResultados(db, tabela);
 		//c.moveToFirst();
 	}
 	
 	public String initialResult(){
 		String b="";
-		c.moveToFirst();
-		b = c.getString(1);
+		cursor.moveToFirst();
+		b = cursor.getString(1);
 		return b;
 		
 	}	
 	
 	public String nextResult(){
 		String b="";			
-		if(!c.isLast())
-			c.moveToNext();			
-		b = c.getString(1);			
+		if(!cursor.isLast())
+			cursor.moveToNext();			
+		b = cursor.getString(1);			
 		return b;
 	}
 	
 	public String currentResult(int position){		
 		String b="";	
-		c.moveToPosition(position);			
-		b = c.getString(1);								
+		cursor.moveToPosition(position);			
+		b = cursor.getString(1);								
 		return b;
 	}
 	
 	public String previousResult(){
 		String b="";
-		if(!c.isFirst()){
-			c.moveToPrevious();		
-			b = c.getString(1);
+		if(!cursor.isFirst()){
+			cursor.moveToPrevious();		
+			b = cursor.getString(1);
 		}else{
-			c.moveToFirst();
+			cursor.moveToFirst();
 			previous = true;			
 		}
 		return b;
@@ -133,5 +133,13 @@ public class MainControl {
 		}{
 			return false;
 		}
+	}
+
+	public Cursor getCursor() {
+		return cursor;
+	}
+
+	public void setCursor(Cursor cursor) {
+		this.cursor = cursor;
 	}
 }

@@ -37,8 +37,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="controller.EditWatcher" project="AlimentadorDeMemoria" 
-    file="/AlimentadorDeMemoria/src/controller/EditWatcher.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="5" language="java" name="controller.FormatadorDeTexto" project="AlimentadorDeMemoria" 
+    file="/AlimentadorDeMemoria/src/controller/FormatadorDeTexto.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="243" width="266" x="-160" y="819"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -55,8 +55,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="controller.MainControl" project="AlimentadorDeMemoria" 
-    file="/AlimentadorDeMemoria/src/controller/MainControl.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="7" language="java" name="controller.ControladorDoDB" project="AlimentadorDeMemoria" 
+    file="/AlimentadorDeMemoria/src/controller/ControladorDoDB.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="441" width="237" x="146" y="819"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -77,52 +77,48 @@
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="6"/>  
   </dependency>  
-  <generalization id="10">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="3"/>  
-  </generalization>  
-  <dependency id="11">    
+  <dependency id="10">    
     <bendpoint x="444" y="37"/>    
     <end type="SOURCE" refId="2"/>    
     <end type="TARGET" refId="8"/>  
   </dependency>  
-  <association id="12">    
+  <association id="11">    
     <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="13" name="banco"/>      
-      <multiplicity id="14" minimum="0" maximum="1"/>    
+      <attribute id="12" name="banco"/>      
+      <multiplicity id="13" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="15">    
+  <association id="14">    
     <bendpoint x="155" y="446"/>    
     <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="16" name="mc"/>      
-      <multiplicity id="17" minimum="0" maximum="1"/>    
+      <attribute id="15" name="mc"/>      
+      <multiplicity id="16" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="18">    
+  <dependency id="17">    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="5"/>  
   </dependency>  
-  <generalization id="19">    
+  <generalization id="18">    
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="1"/>  
   </generalization>  
-  <dependency id="20">    
+  <dependency id="19">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="3"/>  
   </dependency>  
-  <generalization id="21">    
+  <generalization id="20">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="2"/>  
   </generalization>  
-  <association id="22">    
+  <association id="21">    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="23" name="mc"/>      
-      <multiplicity id="24" minimum="0" maximum="1"/>    
+      <attribute id="22" name="mc"/>      
+      <multiplicity id="23" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
