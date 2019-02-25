@@ -1,10 +1,17 @@
 package model;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
+import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 public class Banco extends SQLiteOpenHelper
@@ -129,4 +136,31 @@ public class Banco extends SQLiteOpenHelper
 		return a;
 	}
 	
+	public void exportarToCSV(SQLiteDatabase db, String tabela){
+		Cursor c = retornarTodosResultados(db, tabela);
+		int a = c.getColumnCount();
+	}
+	
+	public File getPublicAlbumStorageDir(String albumName) {
+	    // Get the directory for the user's public pictures directory.
+	    File file = new File(Environment.getExternalStoragePublicDirectory(
+	            Environment.DIRECTORY_PICTURES), albumName);
+	    if (!file.mkdirs()) {
+	        Log.e("FeedMemo", "Directory not created");
+	    }
+	    return file;
+	}
+	
+	public void salvarLinhasProcessadas(String file, String textoParaSalvar) {
+        try {
+            if (file != null) {
+            	FileWriter fw = new FileWriter(file, true);
+            	fw.write(textoParaSalvar);
+            }
+        } catch (Exception ex) {
+        	Log.e("FeedMemo", "File not created");
+        }
+    }
 }
+	
+

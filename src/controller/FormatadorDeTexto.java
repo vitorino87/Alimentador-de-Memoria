@@ -7,9 +7,7 @@ import android.widget.EditText;
 
 
 //classe para lidar com o EditText, ao digitar alguma coisa nele.
-
-
-public class EditWatcher extends view.MainView2 implements TextWatcher {
+public class FormatadorDeTexto implements TextWatcher {
 
 	String text = "";
 	int qtdePixelHeightAntes = 0;
@@ -18,12 +16,9 @@ public class EditWatcher extends view.MainView2 implements TextWatcher {
 	@Override
 	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 	}
-
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 	}
-
-
 	@Override
 	public void afterTextChanged(Editable s) {
 	}
@@ -43,4 +38,11 @@ public class EditWatcher extends view.MainView2 implements TextWatcher {
 	public void setQtdePixelHeightAntes(int pixel){
 		this.qtdePixelHeightAntes = pixel;
 	}
+	
+	//InputFilter[] filterArray = new InputFilter[1];
+			//filterArray[0] = new InputFilter.LengthFilter(25);
+			//filterArray[1] = new InputFilter.LengthFilter(50);
+			//filterArray[2] = new InputFilter.LengthFilter(75);
+			//filterArray[3] = new InputFilter.LengthFilter(100);
+			//txtIdeia.setFilters(filterArray);	
 }

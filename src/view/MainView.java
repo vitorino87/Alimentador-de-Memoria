@@ -19,12 +19,12 @@ import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import controller.GuardadorDeEstados;
-import controller.MainControl;
+import controller.GuardadorDeEstadosTemplate;
+import controller.ControladorDoDB;
 import controller.TelaAux;
 
 public class MainView extends TelaTemplate implements OnTouchListener, OnGestureListener{	
-	static MainControl mc = null;		
+	static ControladorDoDB mc = null;		
 	LinearLayout ll = null;		
 	public static Context context;
 	static EditText ideia = null;
@@ -33,7 +33,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState); //chama o método onCreate da Classe mãe
 		context = this.getApplicationContext(); //pega o contexto desta View		
-		mc = new MainControl(context); //instancia um MainControl com o contexto desta View
+		mc = new ControladorDoDB(context); //instancia um MainControl com o contexto desta View
 		setContentView(R.layout.tela1);	//Carrega a tela1	
 		ll = (LinearLayout)findViewById(R.id.linearLayout);//conecta o linearLayout a variável ll
 		gestureDetector = new GestureDetector(MainView.this, MainView.this);//instancia o gesture para trabalhar com os gestos na tela
@@ -143,7 +143,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	protected void onPause(){
 		super.onPause();
 		int posicao = mc.armazenarPositionDoCursor();
-		GuardadorDeEstados gd = new GuardadorDeEstados();
+		GuardadorDeEstadosTemplate gd = new GuardadorDeEstadosTemplate();
 		gd.guardarEstado("posicao", posicao, this);
 		try{
 
@@ -190,7 +190,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 				//método que faz select e atualiza o Cursor
 				mc.atualizarCursorAposInserirIdeia("memoria");				
 			}
-			GuardadorDeEstados gd = new GuardadorDeEstados();	
+			GuardadorDeEstadosTemplate gd = new GuardadorDeEstadosTemplate();	
 			int a = gd.restaurarEstado("posicao", this);
 			if(a!=-1){
 				carregarIdeia(a);
