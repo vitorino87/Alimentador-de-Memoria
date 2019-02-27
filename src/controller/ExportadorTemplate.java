@@ -29,11 +29,12 @@ public class ExportadorTemplate {
 	 * Método para invocar o "salvar como" do Android 
 	 */
 	@TargetApi(Build.VERSION_CODES.KITKAT)
-	public void salvarComo(){
+	public int salvarComo(){
 		Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT); //invocando a intenção de criar um documento
 		intent.addCategory(Intent.CATEGORY_OPENABLE); 			//adicionando a categoria
 		intent.setType(TIPOMIME);								//adicionando o tipo MIME
 		ac.startActivityForResult(intent, 1);			//invocando a intenção
+		return 1;
 	}
 	
 	/**
