@@ -29,11 +29,12 @@ public class ExportadorTemplate {
 	 * Método para invocar o "salvar como" do Android 
 	 */
 	@TargetApi(Build.VERSION_CODES.KITKAT)
-	public void salvarComo(){
+	public int salvarComo(){
 		Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT); //invocando a intenção de criar um documento
 		intent.addCategory(Intent.CATEGORY_OPENABLE); 			//adicionando a categoria
 		intent.setType(TIPOMIME);								//adicionando o tipo MIME
 		ac.startActivityForResult(intent, 1);			//invocando a intenção
+		return 1;
 	}
 	
 	/**
@@ -44,7 +45,8 @@ public class ExportadorTemplate {
 	 * @param info - as informações que serão exportadas
 	 */
 	@TargetApi(Build.VERSION_CODES.KITKAT)
-	public void exportar(int requestCode, int resultCode, Intent data, String info){
+	public boolean exportar(int requestCode, int resultCode, Intent data, String info){
+		boolean sucess = false;
 		switch (requestCode) { //checando o código de requisição                               
 		case 1:
 			if (resultCode == ac.RESULT_OK) { //verificando o código do resultado
@@ -61,6 +63,7 @@ public class ExportadorTemplate {
 							Writer fw2 = new OutputStreamWriter(fos, StandardCharsets.UTF_8); //Gerando um OutputStreamWriter, UTF-8
 							fw2.write(info); //gravando a informação no arquivo
 							fw2.close(); 	 //fechando o writer
+							sucess = true;
 						} catch (IOException e) {
 							e.printStackTrace();
 						}																
@@ -70,5 +73,6 @@ public class ExportadorTemplate {
 			}
 			break;
 		}
+		return sucess;
 	}
 }

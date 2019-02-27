@@ -1,6 +1,10 @@
 package view;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import com.example.alimentadordememoria.R;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -13,10 +17,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import controller.ControladorDoDB;
+import controller.ExportadorTemplate;
 import controller.FormatadorDeTexto;
 import controller.GeradorDeCSV;
-import controller.ExportadorTemplate;
-import controller.ControladorDoDB;
+import controller.ImportadorPreliminar;
 
 @SuppressLint("NewApi")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
@@ -29,6 +34,7 @@ public class MainView2 extends Activity {
 	int pixelAnterior=0;
 	Button btnExportar,btnImportar;
 	final String TABELA="memoria";
+	int exportarOuImportar = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -47,8 +53,8 @@ public class MainView2 extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
-				
+				ImportadorPreliminar it = new ImportadorPreliminar(MainView2.this);		
+				exportarOuImportar = it.abrirArquivo();
 			}
 		});
 		
@@ -58,7 +64,7 @@ public class MainView2 extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				ExportadorTemplate et = new ExportadorTemplate(MainView2.this); //instanciando o Exportador
-				et.salvarComo();  //salvando o arquivo onde será exportado a informação desejada
+				exportarOuImportar = et.salvarComo();  //salvando o arquivo onde será exportado a informação desejada
 			}
 		});
 
@@ -123,13 +129,42 @@ public class MainView2 extends Activity {
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) { //método invocando ao retornar uma intent
-		// TODO Auto-generated method stub
-		ExportadorTemplate e = new ExportadorTemplate(MainView2.this); //instanciando o exportador
-		GeradorDeCSV geraCSV = new GeradorDeCSV();		
 		Context context = this.getApplicationContext();
 		mc = new ControladorDoDB(context);// instancia um MainControl com o contexto atual
-		String csv = geraCSV.getCSV(mc, TABELA);
-		e.exportar(requestCode, resultCode, data, csv);//exportando
+		mc.abrirConexao();
+		switch(exportarOuImportar){
+		case 1:
+			ExportadorTemplate e = new ExportadorTemplate(MainView2.this); //instanciando o exportador
+			GeradorDeCSV geraCSV = new GeradorDeCSV();					
+			String csv = geraCSV.getCSV(mc, TABELA);
+			if(e.exportar(requestCode, resultCode, data, csv)){
+				Toast.makeText(this, "Exportado com Sucesso!", Toast.LENGTH_LONG).show();
+			}else{
+				Toast.makeText(this, "Erro na exportação", Toast.LENGTH_LONG).show();
+			};//exportando
+			
+			break;
+		case 2:
+			ImportadorPreliminar i = new ImportadorPreliminar(MainView2.this);
+			boolean verifica=true;
+			ArrayList<String> listaDeErros = new ArrayList<String>();//serve para listar os itens que falharam
+			ArrayList<String> lista = i.importar(requestCode, resultCode, data); 
+			Iterator<String> iterator = lista.iterator();			
+			while(iterator.hasNext()){
+				String ideia = iterator.next();
+				Long l = mc.inserirRow(ideia, TABELA);
+				if(l==-1){
+					verifica=false;
+					listaDeErros.add(ideia);
+				}
+			}
+			if(verifica)
+				Toast.makeText(this, "Importado com Sucesso!", Toast.LENGTH_LONG).show();
+			else
+				Toast.makeText(this, "Erro! Itens não importados: "+listaDeErros, Toast.LENGTH_LONG).show();
+			break;
+		}					
+		exportarOuImportar = 0;
 	}	
 	
 	public void setPixelAnterior(int pixel){ //métodos para trabalhar com o tamanho do texto 

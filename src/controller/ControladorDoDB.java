@@ -120,9 +120,9 @@ public class ControladorDoDB {
 		return b;
 	}
 	
-	public Long inserirRow(String valor, String tabela){
+	public Long inserirRow(String ideia, String tabela){
 		ContentValues cv = new ContentValues();
-		cv.put("ideia", valor);
+		cv.put("ideia", ideia);
 		Long a = banco.inserir(db, cv, tabela);
 		return a;
 	}
