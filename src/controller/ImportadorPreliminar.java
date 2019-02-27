@@ -1,6 +1,5 @@
 package controller;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,6 +31,10 @@ public class ImportadorPreliminar {
 		this.ac = ac;
 	}
 
+	/**
+	 * Abre o arquivo que será exportado
+	 * @return número 2, significa que trata-se de uma importação
+	 */
 	public int abrirArquivo(){
 		//Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -41,7 +44,13 @@ public class ImportadorPreliminar {
 		return 2;
 	}
 	
-	
+	/**
+	 * Programa para realizar a importação do arquivo para a memória
+	 * @param requestCode - codigo da requisição
+	 * @param resultCode - código do resultado obtido
+	 * @param data - dados retornados pela intent
+	 * @return
+	 */
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	public ArrayList<String> importar(int requestCode, int resultCode, Intent data){
 		ArrayList<String> lista = new ArrayList<String>();
@@ -53,17 +62,17 @@ public class ImportadorPreliminar {
 				Log.i(NOMEDOPROGRAMA, "Uri: "+uri.toString());
 				try {					
 					InputStream is  = ac.getContentResolver().openInputStream(uri);
-					FileInputStream fis = (FileInputStream)is;
-					Reader rd = new InputStreamReader(is, StandardCharsets.UTF_8);					
+					//FileInputStream fis = (FileInputStream)is;
+					Reader rd = new InputStreamReader(is, StandardCharsets.UTF_8);//utilizando utf-8				
 					int ch;
 					String text = "";
-					while((ch = rd.read())!=-1){
-						if(ch != 10 && ch != 13){
-							if(ch!=34)
+					while((ch = rd.read())!=-1){ 
+						if(ch != 10 && ch != 13){ //se char não é enter
+							if(ch!=34) //se char não é "
 								text+=String.valueOf((char)ch);						
 						}else{
-							lista.add(text);
-							text="";
+							lista.add(text); //adiciona na lista
+							text=""; //limpa variavel
 						}						
 					}										
 				} catch (IOException e) {
@@ -73,13 +82,5 @@ public class ImportadorPreliminar {
 			}
 		}
 		return lista;
-	}
-	
-	public void carregarNoBD(ArrayList<String> lista){
-		Iterator i = lista.iterator();		
-		while(i.hasNext()){
-
-		}
-	}
-	
+	}	
 }

@@ -137,13 +137,18 @@ public class MainView2 extends Activity {
 			ExportadorTemplate e = new ExportadorTemplate(MainView2.this); //instanciando o exportador
 			GeradorDeCSV geraCSV = new GeradorDeCSV();					
 			String csv = geraCSV.getCSV(mc, TABELA);
-			e.exportar(requestCode, resultCode, data, csv);//exportando
+			if(e.exportar(requestCode, resultCode, data, csv)){
+				Toast.makeText(this, "Exportado com Sucesso!", Toast.LENGTH_LONG).show();
+			}else{
+				Toast.makeText(this, "Erro na exportação", Toast.LENGTH_LONG).show();
+			};//exportando
+			
 			break;
 		case 2:
 			ImportadorPreliminar i = new ImportadorPreliminar(MainView2.this);
 			boolean verifica=true;
-			ArrayList<String> listaDeErros = new ArrayList<String>();
-			ArrayList<String> lista = i.importar(requestCode, resultCode, data);
+			ArrayList<String> listaDeErros = new ArrayList<String>();//serve para listar os itens que falharam
+			ArrayList<String> lista = i.importar(requestCode, resultCode, data); 
 			Iterator<String> iterator = lista.iterator();			
 			while(iterator.hasNext()){
 				String ideia = iterator.next();

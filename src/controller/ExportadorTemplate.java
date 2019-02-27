@@ -45,7 +45,8 @@ public class ExportadorTemplate {
 	 * @param info - as informações que serão exportadas
 	 */
 	@TargetApi(Build.VERSION_CODES.KITKAT)
-	public void exportar(int requestCode, int resultCode, Intent data, String info){
+	public boolean exportar(int requestCode, int resultCode, Intent data, String info){
+		boolean sucess = false;
 		switch (requestCode) { //checando o código de requisição                               
 		case 1:
 			if (resultCode == ac.RESULT_OK) { //verificando o código do resultado
@@ -62,6 +63,7 @@ public class ExportadorTemplate {
 							Writer fw2 = new OutputStreamWriter(fos, StandardCharsets.UTF_8); //Gerando um OutputStreamWriter, UTF-8
 							fw2.write(info); //gravando a informação no arquivo
 							fw2.close(); 	 //fechando o writer
+							sucess = true;
 						} catch (IOException e) {
 							e.printStackTrace();
 						}																
@@ -71,5 +73,6 @@ public class ExportadorTemplate {
 			}
 			break;
 		}
+		return sucess;
 	}
 }
