@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 import model.Banco;
 
 public class ControladorDoDB {
@@ -121,10 +122,15 @@ public class ControladorDoDB {
 	}
 	
 	public Long inserirRow(String ideia, String tabela){
-		ContentValues cv = new ContentValues();
-		cv.put("ideia", ideia);
-		Long a = banco.inserir(db, cv, tabela);
-		return a;
+		if(!banco.buscar(db, ideia,tabela)){
+			ContentValues cv = new ContentValues();
+			cv.put("ideia", ideia);
+			Long a = banco.inserir(db, cv, tabela);
+			return a;
+		}else{
+			return -1L;
+		}
+		
 	}
 	
 	public boolean deletarRow(String ideia, String tabela){

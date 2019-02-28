@@ -68,6 +68,23 @@ public class Banco extends SQLiteOpenHelper
 			return null;
 		}
 	}
+	
+	public boolean buscar(SQLiteDatabase db, String ideia, String tabela)
+	{
+		String[] args = {ideia};
+		Cursor c = null;
+		try{
+			c = db.query(tabela, null, "ideia like ?", args, null, null, null);
+			if(c.moveToFirst()){
+				return true;
+			}else{
+				return false;
+			}
+		}catch(Exception ex){
+			return false;
+		}
+	}
+	
 	/**
 	 * Método para retornar a row com maior id 
 	 * @param db - SQLiteDatabase que irá receber o método
@@ -136,12 +153,12 @@ public class Banco extends SQLiteOpenHelper
 		return a;
 	}
 	
-	public void exportarToCSV(SQLiteDatabase db, String tabela){
+	/*public void exportarToCSV(SQLiteDatabase db, String tabela){
 		Cursor c = retornarTodosResultados(db, tabela);
 		int a = c.getColumnCount();
-	}
+	}*/
 	
-	public File getPublicAlbumStorageDir(String albumName) {
+	/*public File getPublicAlbumStorageDir(String albumName) {
 	    // Get the directory for the user's public pictures directory.
 	    File file = new File(Environment.getExternalStoragePublicDirectory(
 	            Environment.DIRECTORY_PICTURES), albumName);
@@ -149,9 +166,9 @@ public class Banco extends SQLiteOpenHelper
 	        Log.e("FeedMemo", "Directory not created");
 	    }
 	    return file;
-	}
+	}*/
 	
-	public void salvarLinhasProcessadas(String file, String textoParaSalvar) {
+	/*public void salvarLinhasProcessadas(String file, String textoParaSalvar) {
         try {
             if (file != null) {
             	FileWriter fw = new FileWriter(file, true);
@@ -160,7 +177,7 @@ public class Banco extends SQLiteOpenHelper
         } catch (Exception ex) {
         	Log.e("FeedMemo", "File not created");
         }
-    }
+    }*/
 }
 	
 

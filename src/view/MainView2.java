@@ -80,7 +80,7 @@ public class MainView2 extends Activity {
 					if (l > -1) { // se o método anterior retornar um valor maior que -1
 						Toast.makeText(context, "Ideia Salva!", Toast.LENGTH_SHORT).show();
 					} else {
-						Toast.makeText(context, "Ideia Não Salva!", Toast.LENGTH_SHORT).show();
+						Toast.makeText(context, "Ideia já existe ou não pode ser salva!", Toast.LENGTH_SHORT).show();
 					}
 				}
 				mc.fecharConexao(); // fecha a conexão
@@ -101,7 +101,7 @@ public class MainView2 extends Activity {
 					if (l) { // se return true
 						Toast.makeText(context, "Ideia Removida!", Toast.LENGTH_SHORT).show();
 					} else {
-						Toast.makeText(context, "Ideia Não Removida!", Toast.LENGTH_SHORT).show();
+						Toast.makeText(context, "Ideia não existe ou não pode ser removida!", Toast.LENGTH_SHORT).show();
 					}
 				}
 				mc.fecharConexao(); // fecha a conexão
