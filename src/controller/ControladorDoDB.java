@@ -97,7 +97,9 @@ public class ControladorDoDB {
 	public String nextResult(){
 		String b="";			
 		if(!cursor.isLast())
-			cursor.moveToNext();			
+			cursor.moveToNext();
+		else
+			cursor.moveToPosition(0);
 		b = cursor.getString(1);			
 		return b;
 	}
@@ -115,8 +117,9 @@ public class ControladorDoDB {
 			cursor.moveToPrevious();		
 			b = cursor.getString(1);
 		}else{
-			cursor.moveToFirst();
-			previous = true;			
+			cursor.moveToLast();
+			b = cursor.getString(1);
+			/*previous = true;*/			
 		}
 		return b;
 	}
