@@ -25,6 +25,8 @@ public final class R {
     }
     public static final class integer {
         public static final int tiago=0x7f040000;
+        public static final int tiago100=0x7f040002;
+        public static final int tiago50=0x7f040001;
     }
     public static final class layout {
         public static final int tela1=0x7f030000;

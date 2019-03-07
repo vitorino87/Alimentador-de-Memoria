@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer name="tiago">25</integer></resources>
+    <integer name="tiago">25</integer>
+    <integer name="tiago50">50</integer>
+    <integer name="tiago100">25</integer>
+</resources>
