@@ -13,10 +13,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -29,7 +32,8 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	public static Context context;
 	static EditText ideia = null;
 	final String TABELA="memoria";
-	static MenuItem item1, item2, item3, item4;
+	ViewGroup gi = null;
+	Menu menu = null;
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
@@ -40,11 +44,9 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		setContentView(R.layout.tela1);	//Carrega a tela1	
 		ll = (LinearLayout)findViewById(R.id.linearLayout);//conecta o linearLayout a variável ll
 		gestureDetector = new GestureDetector(MainView.this, MainView.this);//instancia o gesture para trabalhar com os gestos na tela
-		ideia = (EditText)findViewById(R.id.editText1);//conecta o editText1 a variável ideia		
-		item1 = (MenuItem) findViewById(R.id.item1);
-		item2 = (MenuItem) findViewById(R.id.item2);
-		item3 = (MenuItem) findViewById(R.id.item3);
-		item4 = (MenuItem) findViewById(R.id.item4);						
+		ideia = (EditText)findViewById(R.id.editText1);//conecta o editText1 a variável ideia						
+		
+		
 		
 		//método para adicionar a ação de Touch no LinearLayout
 		ll.setOnTouchListener(new OnTouchListener() {			
@@ -76,7 +78,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	}	
 	
 	
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	/*@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public void carregarFirst2(){
 		try{
 			String b = mc.initialResult();
@@ -85,13 +87,13 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			invalidateOptionsMenu();
 		}catch(Exception ex){			
 		}
-	}
+	}*/
 	
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	/*@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public void atualizarMenu(){
 		item4.setVisible(false);
 		invalidateOptionsMenu();
-	}
+	}*/
 	
 	/**
 	 * Método para carregar todos os resultados da tabela memoria do banco
@@ -153,12 +155,11 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-
 		switch (id) {
 		case R.id.item1:					
 			mc.armazenarPositionDoCursor();//esse método armazena a posição do Cursor, antes de chamar a próxima tela 			
-			Intent it = new Intent(this, MainView2.class);//Criando a intenção de chamar a próxima classe/Tela			
-			startActivity(it);//Inicia o método onCreate da classe MainView2
+			Intent it = new Intent(this, MainView2.class);//Criando a intenção de chamar a próxima classe/Tela
+			startActivity(it);//Inicia o método onCreate da classe MainView2			
 			break;
 		case R.id.item2:
 			if(mc.addDeadFile(TABELA, ideia.getText().toString())!=-2){
@@ -170,11 +171,13 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			}
 			break;
 		case R.id.item3:
-			if(mc.resultDeadFiles(TABELA)){
+			if(mc.resultDeadFiles(TABELA)){				
 				Toast.makeText(context, "Dead Files", Toast.LENGTH_LONG).show();
 				carregarIdeia();
 			}else{
-				Toast.makeText(context, "Não há Dead Files", Toast.LENGTH_LONG).show();
+				Toast.makeText(context, "Não há Dead Files", Toast.LENGTH_LONG).show();	
+				menu.clear();
+				onCreateOptionsMenu2(menu);
 			}
 			break;
 		case R.id.item4:
@@ -268,5 +271,20 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		Random random = new Random();
 		String id = String.format("%06d", random.nextInt(999999));
 		ideia.setTextColor(Color.parseColor("#" + id));		
+	}		
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.menu, menu);
+	    this.menu = menu;
+	    return true;
+	}
+	
+	
+	public boolean onCreateOptionsMenu2(Menu menu) {		
+	    MenuInflater inflater = getMenuInflater();	    
+	    inflater.inflate(R.menu.test, menu);	    
+	    return true;
 	}
 }
