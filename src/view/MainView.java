@@ -135,7 +135,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			startActivity(it);//Inicia o método onCreate da classe MainView2			
 			break;
 		case R.id.item2:
-			if(mc.addDeadFile(TABELA, ideia.getText().toString())!=-2){
+			if(mc.addOrDelDeadFile(TABELA, ideia.getText().toString(),"s")!=-2){
 				Toast.makeText(context, "Adicionado ao arquivo morto", Toast.LENGTH_LONG).show();	
 				mc.retornarTodosResultados(TABELA);			
 				carregarIdeia();
@@ -145,18 +145,39 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			break;
 		case R.id.item3:
 			if(mc.resultDeadFiles(TABELA)){				
-				Toast.makeText(context, "Dead Files", Toast.LENGTH_LONG).show();
-				carregarIdeia();
-			}else{
-				Toast.makeText(context, "Não há Dead Files", Toast.LENGTH_LONG).show();	
+				Toast.makeText(context, "Dead Files", Toast.LENGTH_LONG).show();				
 				menu.clear();
 				MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
-			    mmv.chamarMenuInicial(R.menu.test);
+			    mmv.chamarMenuInicial(R.menu.menu2);
+			    carregarIdeia();
+			}else{
+				Toast.makeText(context, "Não há Dead Files", Toast.LENGTH_LONG).show();					
+			}
+			break;		
+		case R.id.item5:
+			if(mc.addOrDelDeadFile(TABELA, ideia.getText().toString(), "n")!=2){
+				Toast.makeText(context, "Removido do arquivo morto", Toast.LENGTH_LONG).show();
+				if(mc.resultDeadFiles(TABELA)){
+					carregarIdeia();
+				}else{
+					menu.clear();
+					MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
+				    mmv.chamarMenuInicial(R.menu.menu);
+					Toast.makeText(context, "Não há Dead Files, por isso Retornou", Toast.LENGTH_LONG).show();
+					mc.retornarTodosResultados(TABELA);	
+					carregarIdeia();
+				}
+				
+			}else{
+				Toast.makeText(context, "Não foi possível remover do arquivo morto", Toast.LENGTH_LONG).show();
 			}
 			break;
-		case R.id.item4:
+		case R.id.item6:
 			mc.retornarTodosResultados(TABELA);			
 			carregarIdeia();
+			menu.clear();
+			MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
+		    mmv.chamarMenuInicial(R.menu.menu);
 			break;
 		}
 		return super.onOptionsItemSelected(item);

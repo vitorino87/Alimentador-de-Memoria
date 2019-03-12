@@ -124,11 +124,11 @@ public class ControladorDoDB {
 		return b;
 	}
 	
-	public Long inserirRow(String ideia, String tabela){
-		if(!banco.buscar(db, ideia,tabela)){
+	public Long inserirRow(Object ideia, Object morto, String tabela){
+		if(!banco.buscar(db, (String)ideia,tabela)){
 			ContentValues cv = new ContentValues();
-			cv.put("morto", "n");
-			cv.put("ideia", ideia);
+			cv.put("morto", (String)morto);
+			cv.put("ideia", (String)ideia);
 			Long a = banco.inserir(db, cv, tabela);
 			return a;
 		}else{
@@ -153,16 +153,16 @@ public class ControladorDoDB {
 		this.cursor = cursor;
 	}
 	
-	public int addDeadFile(String tabela, String ideia){
+	public int addOrDelDeadFile(String tabela, String ideia, String dead){
 		abrirConexao();
 		ContentValues cv = new ContentValues();
-		cv.put("morto", "s");
+		cv.put("morto", dead);
 		int a = banco.atualizarIdeia(db, cv, tabela, ideia);
 		if(a!=-2){
 			cursor = null;
 		}
 		return a;
-	}
+	}		
 	
 	public boolean resultDeadFiles(String tabela){
 		abrirConexao();		

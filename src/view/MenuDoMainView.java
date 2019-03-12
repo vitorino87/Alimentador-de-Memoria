@@ -1,7 +1,5 @@
 package view;
 
-import com.example.alimentadordememoria.R;
-
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuInflater;

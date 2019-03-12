@@ -16,13 +16,12 @@ public final class R {
         public static final int button1=0x7f080004;
         public static final int deletar=0x7f080002;
         public static final int editText1=0x7f080001;
-        public static final int group1=0x7f08000b;
-        public static final int group2=0x7f08000c;
         public static final int ideia=0x7f080003;
         public static final int item1=0x7f080007;
         public static final int item2=0x7f080008;
         public static final int item3=0x7f080009;
-        public static final int item4=0x7f08000a;
+        public static final int item5=0x7f08000a;
+        public static final int item6=0x7f08000b;
         public static final int linearLayout=0x7f080000;
     }
     public static final class integer {
@@ -36,7 +35,7 @@ public final class R {
     }
     public static final class menu {
         public static final int menu=0x7f070000;
-        public static final int test=0x7f070001;
+        public static final int menu2=0x7f070001;
     }
     public static final class mipmap {
         public static final int ic_launcher=0x7f020000;
