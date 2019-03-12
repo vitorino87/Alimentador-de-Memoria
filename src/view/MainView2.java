@@ -151,11 +151,30 @@ public class MainView2 extends Activity {
 			ArrayList<String> lista = i.importar(requestCode, resultCode, data); 
 			Iterator<String> iterator = lista.iterator();			
 			while(iterator.hasNext()){
-				String ideia = iterator.next();
-				Long l = mc.inserirRow(ideia, TABELA);
+				String valores = iterator.next();
+				ArrayList<Object> valor = new ArrayList<Object>();//variavel para armazenar os valores								
+				int a = 0;//variavel para realizar a contagem				
+				while(!valores.isEmpty()){ //irá iterar até ser empty
+					if(valores.charAt(a)==',' || a==valores.length()-1){
+						String ideia = valores.substring(0, a);												
+						if(ideia.contains("\"")){//checando se há aspas na palavra
+							ideia = ideia.replace("\"", ""); //substituindo as aspas por vazio
+							valor.add(ideia);//inserindo a palavra
+						}else{
+							valor.add(ideia);//se não houver aspas apenas adiciona
+						}						
+						valores = valores.substring(a+1);//reduz a variavel valores e pula virgula
+						a=0;//zerando a contagem
+					}
+					a++;					
+					//String mIdeia = valores.substring(valores.indexOf("\""), valores.) ;
+				}
+				/////////////////////continue daqui para frente//////////////////////////
+				
+				Long l = mc.inserirRow(valores, TABELA);
 				if(l==-1){
 					verifica=false;
-					listaDeErros.add(ideia);
+					listaDeErros.add(valores);
 				}
 			}
 			if(verifica)

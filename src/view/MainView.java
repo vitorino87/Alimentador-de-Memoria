@@ -44,10 +44,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		setContentView(R.layout.tela1);	//Carrega a tela1	
 		ll = (LinearLayout)findViewById(R.id.linearLayout);//conecta o linearLayout a variável ll
 		gestureDetector = new GestureDetector(MainView.this, MainView.this);//instancia o gesture para trabalhar com os gestos na tela
-		ideia = (EditText)findViewById(R.id.editText1);//conecta o editText1 a variável ideia						
-		
-		
-		
+		ideia = (EditText)findViewById(R.id.editText1);//conecta o editText1 a variável ideia								
 		//método para adicionar a ação de Touch no LinearLayout
 		ll.setOnTouchListener(new OnTouchListener() {			
 			@Override
@@ -57,8 +54,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 				ll.onTouchEvent(event);
 				return true;
 			}
-		});
-		
+		});		
 		//método para adicionar a ação de Touch no EditText
 		ideia.setOnTouchListener(new OnTouchListener() {			
 			@Override
@@ -72,35 +68,13 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		//faz a busca e carrega os dados do banco num cursor
 		loadIdeias();
 		//move o cursor para o primeiro elemento retornado do banco
-		carregarFirst();		
-		//carregarFirst2();
-		
+		carregarFirst();				
 	}	
-	
-	
-	/*@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	public void carregarFirst2(){
-		try{
-			String b = mc.initialResult();
-			ideia.setText(b);
-			item4.setVisible(false);
-			invalidateOptionsMenu();
-		}catch(Exception ex){			
-		}
-	}*/
-	
-	/*@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	public void atualizarMenu(){
-		item4.setVisible(false);
-		invalidateOptionsMenu();
-	}*/
 	
 	/**
 	 * Método para carregar todos os resultados da tabela memoria do banco
 	 */
-	public static void loadIdeias(){
-		mc.retornarTodosResultados("memoria");		
-	}
+	public static void loadIdeias(){mc.retornarTodosResultados("memoria");}
 	
 	/**
 	 * Método para carregar a ideia no EditText
@@ -109,8 +83,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		try{
 			String b = mc.nextResult();
 			ideia.setText(b);			
-		}catch(Exception ex){			
-		}		
+		}catch(Exception ex){}		
 	}
 		
 	/**
@@ -177,7 +150,8 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			}else{
 				Toast.makeText(context, "Não há Dead Files", Toast.LENGTH_LONG).show();	
 				menu.clear();
-				onCreateOptionsMenu2(menu);
+				MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
+			    mmv.chamarMenuInicial(R.menu.test);
 			}
 			break;
 		case R.id.item4:
@@ -197,25 +171,13 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		int posicao = mc.armazenarPositionDoCursor();
 		GuardadorDeEstadosTemplate gd = new GuardadorDeEstadosTemplate();
 		gd.guardarEstado("posicao", posicao, this);
-		try{
-
-		}catch(Exception ex){
-			
-		}		
 	}
 	
 	/**
 	 * Método de stop
 	 */
 	@Override
-	protected void onStop(){
-		super.onStop();
-		try{
-
-		}catch(Exception ex){
-			
-		}
-	}
+	protected void onStop(){super.onStop();}
 	
 	/**
 	 * Método que ocorre ao fechar app
@@ -225,9 +187,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		super.onDestroy();
 		try{
 			mc.fecharConexao();
-		}catch(Exception ex){
-			
-		}
+		}catch(Exception ex){}
 	}
 	
 	/**
@@ -247,10 +207,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			if(a!=-1){
 				carregarIdeia(a);
 			}
-			//loadIdeias();
-		}catch(Exception ex){
-			
-		}		
+		}catch(Exception ex){}		
 	}
 	
 	/**
@@ -261,9 +218,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		super.onStart();
 		try{
 			mc.abrirConexao();			
-		}catch(Exception ex){
-			
-		}
+		}catch(Exception ex){}
 	}
 	
 	@SuppressLint("DefaultLocale")
@@ -274,17 +229,9 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	}		
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.menu, menu);
+	public boolean onCreateOptionsMenu(Menu menu) {	    
 	    this.menu = menu;
-	    return true;
-	}
-	
-	
-	public boolean onCreateOptionsMenu2(Menu menu) {		
-	    MenuInflater inflater = getMenuInflater();	    
-	    inflater.inflate(R.menu.test, menu);	    
-	    return true;
+	    MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
+	    return mmv.chamarMenuInicial(R.menu.menu);
 	}
 }

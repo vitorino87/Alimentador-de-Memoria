@@ -68,8 +68,8 @@ public class ImportadorPreliminar {
 					String text = "";
 					while((ch = rd.read())!=-1){ 
 						if(ch != 10 && ch != 13){ //se char não é enter
-							if(ch!=34) //se char não é "
-								text+=String.valueOf((char)ch);						
+							//if(ch!=34) //se char não é "
+							text+=String.valueOf((char)ch);						
 						}else{
 							lista.add(text); //adiciona na lista
 							text=""; //limpa variavel

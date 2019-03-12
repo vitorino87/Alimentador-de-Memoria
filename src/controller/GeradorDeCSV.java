@@ -6,7 +6,7 @@ import android.os.Build;
 
 public class GeradorDeCSV {			
 	final String CHAVEPRIMARIA = "id";
-	final String ULTIMACOLUNA = "ideia";
+	final String ULTIMACOLUNA = "morto";
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public String getCSV(ControladorDoDB mc, String TABELA){
