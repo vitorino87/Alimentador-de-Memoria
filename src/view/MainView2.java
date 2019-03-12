@@ -76,7 +76,7 @@ public class MainView2 extends Activity {
 				mc.abrirConexao();// abre a conexão com o banco
 				String ideia = txtIdeia.getText().toString();// adiciona o texto adicionado pelo usuário na variável ideia
 				if (!ideia.equals("")) { // se ideia não for ""
-					Long l = mc.inserirRow(ideia, TABELA); // insere no DB a string ideia na tabela memoria
+					Long l = mc.inserirRow(ideia,"n", TABELA); // insere no DB a string ideia na tabela memoria
 					if (l > -1) { // se o método anterior retornar um valor maior que -1
 						Toast.makeText(context, "Ideia Salva!", Toast.LENGTH_SHORT).show();
 					} else {
@@ -149,13 +149,32 @@ public class MainView2 extends Activity {
 			boolean verifica=true;
 			ArrayList<String> listaDeErros = new ArrayList<String>();//serve para listar os itens que falharam
 			ArrayList<String> lista = i.importar(requestCode, resultCode, data); 
-			Iterator<String> iterator = lista.iterator();			
+			Iterator<String> iterator = lista.iterator();	
 			while(iterator.hasNext()){
-				String ideia = iterator.next();
-				Long l = mc.inserirRow(ideia, TABELA);
+				String valores = iterator.next();
+				ArrayList<Object> valor = new ArrayList<Object>();//variavel para armazenar os valores								
+				int a = 0;//variavel para realizar a contagem da string atual				
+				while(!valores.isEmpty()){ //irá iterar até ser empty
+					if(valores.charAt(a)==',' || a==valores.length()-1){
+						String ideia = valores.substring(0, a);												
+						if(ideia.contains("\"")){//checando se há aspas na palavra
+							ideia = ideia.replace("\"", ""); //substituindo as aspas por vazio
+							valor.add(ideia);//inserindo a palavra
+						}else{
+							valor.add(ideia);//se não houver aspas apenas adiciona
+						}						
+						valores = valores.substring(a+1);//reduz a variavel valores e pula virgula
+						a=0;//zerando a contagem
+					}
+					a++;					
+					//String mIdeia = valores.substring(valores.indexOf("\""), valores.) ;
+				}
+				/////////////////////continue daqui para frente//////////////////////////
+				
+				Long l = mc.inserirRow(valor.get(0), valor.get(1), TABELA);
 				if(l==-1){
 					verifica=false;
-					listaDeErros.add(ideia);
+					listaDeErros.add(valores);
 				}
 			}
 			if(verifica)
@@ -192,25 +211,13 @@ public class MainView2 extends Activity {
 	 * Método de pause
 	 */
 	@Override
-	protected void onPause() {
-		super.onPause();
-		try {
-		} catch (Exception ex) {
-
-		}
-	}
+	protected void onPause() {super.onPause();}
 
 	/**
 	 * Método de stop
 	 */
 	@Override
-	protected void onStop() {
-		super.onStop();
-		try {
-		} catch (Exception ex) {
-
-		}
-	}
+	protected void onStop() {super.onStop();}
 
 	/**
 	 * Método que ocorre ao fechar app
@@ -220,9 +227,7 @@ public class MainView2 extends Activity {
 		super.onDestroy();
 		try {
 			mc.fecharConexao();
-		} catch (Exception ex) {
-
-		}
+		} catch (Exception ex) {}
 	}
 
 	/**
@@ -233,9 +238,7 @@ public class MainView2 extends Activity {
 		super.onResume();
 		try {
 			mc.abrirConexao();
-		} catch (Exception ex) {
-
-		}
+		} catch (Exception ex) {}
 	}
 
 	/**
@@ -245,8 +248,6 @@ public class MainView2 extends Activity {
 	protected void onStart() {
 		super.onStart();
 		try {
-		} catch (Exception ex) {
-
-		}
+		} catch (Exception ex) {}
 	}
 }

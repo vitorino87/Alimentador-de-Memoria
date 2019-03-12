@@ -5,30 +5,37 @@ import java.util.Random;
 import com.example.alimentadordememoria.R;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import controller.GuardadorDeEstadosTemplate;
+import android.widget.Toast;
 import controller.ControladorDoDB;
-import controller.TelaAux;
+import controller.GuardadorDeEstadosTemplate;
 
 public class MainView extends TelaTemplate implements OnTouchListener, OnGestureListener{	
 	static ControladorDoDB mc = null;		
 	LinearLayout ll = null;		
 	public static Context context;
 	static EditText ideia = null;
+	final String TABELA="memoria";
+	ViewGroup gi = null;
+	Menu menu = null;
 	
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState); //chama o método onCreate da Classe mãe
@@ -37,8 +44,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		setContentView(R.layout.tela1);	//Carrega a tela1	
 		ll = (LinearLayout)findViewById(R.id.linearLayout);//conecta o linearLayout a variável ll
 		gestureDetector = new GestureDetector(MainView.this, MainView.this);//instancia o gesture para trabalhar com os gestos na tela
-		ideia = (EditText)findViewById(R.id.editText1);//conecta o editText1 a variável ideia					
-		
+		ideia = (EditText)findViewById(R.id.editText1);//conecta o editText1 a variável ideia								
 		//método para adicionar a ação de Touch no LinearLayout
 		ll.setOnTouchListener(new OnTouchListener() {			
 			@Override
@@ -48,8 +54,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 				ll.onTouchEvent(event);
 				return true;
 			}
-		});
-		
+		});		
 		//método para adicionar a ação de Touch no EditText
 		ideia.setOnTouchListener(new OnTouchListener() {			
 			@Override
@@ -63,15 +68,13 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		//faz a busca e carrega os dados do banco num cursor
 		loadIdeias();
 		//move o cursor para o primeiro elemento retornado do banco
-		carregarFirst();
+		carregarFirst();				
 	}	
 	
 	/**
 	 * Método para carregar todos os resultados da tabela memoria do banco
 	 */
-	public static void loadIdeias(){
-		mc.retornarTodosResultados("memoria");		
-	}
+	public static void loadIdeias(){mc.retornarTodosResultados("memoria");}
 	
 	/**
 	 * Método para carregar a ideia no EditText
@@ -79,9 +82,8 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	public static void carregarIdeia(){
 		try{
 			String b = mc.nextResult();
-			ideia.setText(b);
-		}catch(Exception ex){			
-		}		
+			ideia.setText(b);			
+		}catch(Exception ex){}		
 	}
 		
 	/**
@@ -91,6 +93,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		try{
 			String b = mc.initialResult();
 			ideia.setText(b);
+			
 		}catch(Exception ex){			
 		}
 	}
@@ -125,12 +128,56 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-
 		switch (id) {
 		case R.id.item1:					
 			mc.armazenarPositionDoCursor();//esse método armazena a posição do Cursor, antes de chamar a próxima tela 			
-			Intent it = new Intent(this, MainView2.class);//Criando a intenção de chamar a próxima classe/Tela			
-			startActivity(it);//Inicia o método onCreate da classe MainView2
+			Intent it = new Intent(this, MainView2.class);//Criando a intenção de chamar a próxima classe/Tela
+			startActivity(it);//Inicia o método onCreate da classe MainView2			
+			break;
+		case R.id.item2:
+			if(mc.addOrDelDeadFile(TABELA, ideia.getText().toString(),"s")!=-2){
+				Toast.makeText(context, "Adicionado ao arquivo morto", Toast.LENGTH_LONG).show();	
+				mc.retornarTodosResultados(TABELA);			
+				carregarIdeia();
+			}else{
+				Toast.makeText(context, "Não foi possível adicionar ao arquivo morto", Toast.LENGTH_LONG).show();
+			}
+			break;
+		case R.id.item3:
+			if(mc.resultDeadFiles(TABELA)){				
+				Toast.makeText(context, "Dead Files", Toast.LENGTH_LONG).show();				
+				menu.clear();
+				MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
+			    mmv.chamarMenuInicial(R.menu.menu2);
+			    carregarIdeia();
+			}else{
+				Toast.makeText(context, "Não há Dead Files", Toast.LENGTH_LONG).show();					
+			}
+			break;		
+		case R.id.item5:
+			if(mc.addOrDelDeadFile(TABELA, ideia.getText().toString(), "n")!=2){
+				Toast.makeText(context, "Removido do arquivo morto", Toast.LENGTH_LONG).show();
+				if(mc.resultDeadFiles(TABELA)){
+					carregarIdeia();
+				}else{
+					menu.clear();
+					MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
+				    mmv.chamarMenuInicial(R.menu.menu);
+					Toast.makeText(context, "Não há Dead Files, por isso Retornou", Toast.LENGTH_LONG).show();
+					mc.retornarTodosResultados(TABELA);	
+					carregarIdeia();
+				}
+				
+			}else{
+				Toast.makeText(context, "Não foi possível remover do arquivo morto", Toast.LENGTH_LONG).show();
+			}
+			break;
+		case R.id.item6:
+			mc.retornarTodosResultados(TABELA);			
+			carregarIdeia();
+			menu.clear();
+			MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
+		    mmv.chamarMenuInicial(R.menu.menu);
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -145,25 +192,13 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		int posicao = mc.armazenarPositionDoCursor();
 		GuardadorDeEstadosTemplate gd = new GuardadorDeEstadosTemplate();
 		gd.guardarEstado("posicao", posicao, this);
-		try{
-
-		}catch(Exception ex){
-			
-		}		
 	}
 	
 	/**
 	 * Método de stop
 	 */
 	@Override
-	protected void onStop(){
-		super.onStop();
-		try{
-
-		}catch(Exception ex){
-			
-		}
-	}
+	protected void onStop(){super.onStop();}
 	
 	/**
 	 * Método que ocorre ao fechar app
@@ -173,9 +208,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		super.onDestroy();
 		try{
 			mc.fecharConexao();
-		}catch(Exception ex){
-			
-		}
+		}catch(Exception ex){}
 	}
 	
 	/**
@@ -195,10 +228,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			if(a!=-1){
 				carregarIdeia(a);
 			}
-			//loadIdeias();
-		}catch(Exception ex){
-			
-		}		
+		}catch(Exception ex){}		
 	}
 	
 	/**
@@ -209,9 +239,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		super.onStart();
 		try{
 			mc.abrirConexao();			
-		}catch(Exception ex){
-			
-		}
+		}catch(Exception ex){}
 	}
 	
 	@SuppressLint("DefaultLocale")
@@ -219,5 +247,12 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		Random random = new Random();
 		String id = String.format("%06d", random.nextInt(999999));
 		ideia.setTextColor(Color.parseColor("#" + id));		
+	}		
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {	    
+	    this.menu = menu;
+	    MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
+	    return mmv.chamarMenuInicial(R.menu.menu);
 	}
 }

@@ -1,25 +1,17 @@
 package model;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
-import android.os.Environment;
-import android.util.Log;
-import android.widget.Toast;
 
 public class Banco extends SQLiteOpenHelper
 {
 	//Controle da versão
-	private static final int VERSAO_BANCO = 1;
+	private static final int VERSAO_BANCO = 2;
 	//Cria a tabela com _id sequencial
-	private static final String SCRIPT_TABLE_CREATE= "create table memoria(id integer primary key autoincrement, ideia text);";	
+	private static final String SCRIPT_TABLE_CREATE= "create table memoria(id integer primary key autoincrement, ideia text, morto text);";	
 	
 	public Banco(Context context, String nomeBanco) {//criando o banco
 		super(context, nomeBanco, null, VERSAO_BANCO);
@@ -140,7 +132,8 @@ public class Banco extends SQLiteOpenHelper
 	 */
 	public Cursor retornarTodosResultados(SQLiteDatabase db, String tabela){
 		Cursor c = null;
-		c = db.query(tabela, null, null, null, null, null, null);
+		String[] args = {"n"};
+		c = db.query(tabela, null, "morto=?", args, null, null, null);
 		return c;
 	}
 	
@@ -151,6 +144,29 @@ public class Banco extends SQLiteOpenHelper
 			a = db.delete(tabela, "ideia like ?",ideias);
 		}		
 		return a;
+	}
+	
+	public int atualizarIdeia(SQLiteDatabase db, ContentValues novoValor, String tabela, String ideia){
+		int a = -2;
+		try{
+			String[] args = {ideia};
+			a=db.update(tabela, novoValor, "ideia like ?", args);			
+		}catch(Exception e){			
+		}
+		return a;
+	}
+	/**
+	 * Retorna os dead files, são os campos que possuem a coluna morto com valor 1
+	 * @param db
+	 * @param tabela
+	 * @return
+	 */
+	public Cursor retornarTodosDeadFiles(SQLiteDatabase db, String tabela){
+		Cursor c = null;
+		String[] args = {"s"};
+		c = db.query(tabela, null, "morto=?", args, null, null, null);
+		int a = c.getCount();
+		return c;
 	}
 	
 	/*public void exportarToCSV(SQLiteDatabase db, String tabela){
