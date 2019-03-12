@@ -153,24 +153,24 @@ public class MainView2 extends Activity {
 			while(iterator.hasNext()){
 				String valores = iterator.next();
 				ArrayList<Object> valor = new ArrayList<Object>();//variavel para armazenar os valores								
-				int a = 0;//variavel para realizar a contagem da string atual				
-				while(!valores.isEmpty()){ //irá iterar até ser empty
+				int a = 0;//variavel para realizar a contagem da string atual
+				while(!valores.isEmpty()){ //irá iterar até ser empty					
 					if(valores.charAt(a)==',' || a==valores.length()-1){
-						String ideia = valores.substring(0, a);												
-						if(ideia.contains("\"")){//checando se há aspas na palavra
-							ideia = ideia.replace("\"", ""); //substituindo as aspas por vazio
-							valor.add(ideia);//inserindo a palavra
-						}else{
-							valor.add(ideia);//se não houver aspas apenas adiciona
-						}						
-						valores = valores.substring(a+1);//reduz a variavel valores e pula virgula
+						String ideia = valores.substring(0, a+1);	
+						if(ideia.contains(","))
+							ideia = ideia.replace(",", "");
+						if(ideia.charAt(0)==34 && ideia.charAt(a-1)==34){//checando se há aspas no inicio e fim da ideia
+							ideia = ideia.substring(1, a-1); //removendo as aspas								
+						}												
+						valor.add(ideia);//inserindo a palavra												
+						valores = valores.substring(a);//reduz a variavel valores e pula virgula
+						if(valores.length()==1)
+							valores = "";
 						a=0;//zerando a contagem
 					}
-					a++;					
+					a++;						
 					//String mIdeia = valores.substring(valores.indexOf("\""), valores.) ;
-				}
-				/////////////////////continue daqui para frente//////////////////////////
-				
+				}							
 				Long l = mc.inserirRow(valor.get(0), valor.get(1), TABELA);
 				if(l==-1){
 					verifica=false;
