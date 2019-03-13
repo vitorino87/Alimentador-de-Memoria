@@ -1,4 +1,4 @@
-package view;
+              package view;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -75,6 +75,7 @@ public class MainView2 extends Activity {
 				mc = new ControladorDoDB(context);// instancia um MainControl com o contexto atual
 				mc.abrirConexao();// abre a conexão com o banco
 				String ideia = txtIdeia.getText().toString();// adiciona o texto adicionado pelo usuário na variável ideia
+				ideia = ideia.replace(",", ".");
 				if (!ideia.equals("")) { // se ideia não for ""
 					Long l = mc.inserirRow(ideia,"n", TABELA); // insere no DB a string ideia na tabela memoria
 					if (l > -1) { // se o método anterior retornar um valor maior que -1
@@ -151,7 +152,7 @@ public class MainView2 extends Activity {
 			ArrayList<String> lista = i.importar(requestCode, resultCode, data); 
 			Iterator<String> iterator = lista.iterator();	
 			while(iterator.hasNext()){
-				String valores = iterator.next();
+				String valores = iterator.next();				
 				ArrayList<Object> valor = new ArrayList<Object>();//variavel para armazenar os valores								
 				int a = 0;//variavel para realizar a contagem da string atual
 				while(!valores.isEmpty()){ //irá iterar até ser empty					
