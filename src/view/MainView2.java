@@ -1,4 +1,4 @@
-package view;
+              package view;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -75,6 +75,7 @@ public class MainView2 extends Activity {
 				mc = new ControladorDoDB(context);// instancia um MainControl com o contexto atual
 				mc.abrirConexao();// abre a conexão com o banco
 				String ideia = txtIdeia.getText().toString();// adiciona o texto adicionado pelo usuário na variável ideia
+				ideia = ideia.replace(",", "\u0375");
 				if (!ideia.equals("")) { // se ideia não for ""
 					Long l = mc.inserirRow(ideia,"n", TABELA); // insere no DB a string ideia na tabela memoria
 					if (l > -1) { // se o método anterior retornar um valor maior que -1
@@ -96,6 +97,7 @@ public class MainView2 extends Activity {
 				mc = new ControladorDoDB(context);// instancia um MainControl com o contexto atual
 				mc.abrirConexao();// abre a conexão com o banco
 				String ideia = txtIdeia.getText().toString();// adiciona o texto adicionado pelo usuário na variável ideia
+				ideia = ideia.replace(",", "\u0375");
 				if (!ideia.equals("")) { // se ideia não for ""
 					Boolean l = mc.deletarRow(ideia, TABELA); // delete no DB a string ideia na tabela memoria
 					if (l) { // se return true
@@ -147,34 +149,34 @@ public class MainView2 extends Activity {
 		case 2:
 			ImportadorPreliminar i = new ImportadorPreliminar(MainView2.this);
 			boolean verifica=true;
-			ArrayList<String> listaDeErros = new ArrayList<String>();//serve para listar os itens que falharam
+			ArrayList<Object> listaDeErros = new ArrayList<Object>();//serve para listar os itens que falharam
 			ArrayList<String> lista = i.importar(requestCode, resultCode, data); 
 			Iterator<String> iterator = lista.iterator();	
 			while(iterator.hasNext()){
-				String valores = iterator.next();
+				String valores = iterator.next();				
 				ArrayList<Object> valor = new ArrayList<Object>();//variavel para armazenar os valores								
-				int a = 0;//variavel para realizar a contagem da string atual				
-				while(!valores.isEmpty()){ //irá iterar até ser empty
+				int a = 0;//variavel para realizar a contagem da string atual
+				while(!valores.isEmpty()){ //irá iterar até ser empty					
 					if(valores.charAt(a)==',' || a==valores.length()-1){
-						String ideia = valores.substring(0, a);												
-						if(ideia.contains("\"")){//checando se há aspas na palavra
-							ideia = ideia.replace("\"", ""); //substituindo as aspas por vazio
-							valor.add(ideia);//inserindo a palavra
-						}else{
-							valor.add(ideia);//se não houver aspas apenas adiciona
-						}						
-						valores = valores.substring(a+1);//reduz a variavel valores e pula virgula
+						String ideia = valores.substring(0, a+1);	
+						if(ideia.contains(","))
+							ideia = ideia.replace(",", "");
+						if(ideia.charAt(0)==34 && ideia.charAt(a-1)==34){//checando se há aspas no inicio e fim da ideia
+							ideia = ideia.substring(1, a-1); //removendo as aspas								
+						}												
+						valor.add(ideia);//inserindo a palavra												
+						valores = valores.substring(a);//reduz a variavel valores e pula virgula
+						if(valores.length()==1)
+							valores = "";
 						a=0;//zerando a contagem
 					}
-					a++;					
+					a++;						
 					//String mIdeia = valores.substring(valores.indexOf("\""), valores.) ;
-				}
-				/////////////////////continue daqui para frente//////////////////////////
-				
+				}							
 				Long l = mc.inserirRow(valor.get(0), valor.get(1), TABELA);
 				if(l==-1){
 					verifica=false;
-					listaDeErros.add(valores);
+					listaDeErros.add(valor);
 				}
 			}
 			if(verifica)
