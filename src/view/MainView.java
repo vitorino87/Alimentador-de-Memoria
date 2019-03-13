@@ -1,5 +1,6 @@
 package view;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 import com.example.alimentadordememoria.R;
@@ -79,10 +80,13 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	/**
 	 * Método para carregar a ideia no EditText
 	 */
+	@SuppressLint("NewApi")
 	public static void carregarIdeia(){
-		try{
+		try{			
 			String b = mc.nextResult();
-			ideia.setText(b);			
+			String a = new String(b.getBytes("UTF8"), StandardCharsets.UTF_8);	
+			a = a.replace("\u0375", ",");
+			ideia.setText(a);			
 		}catch(Exception ex){}		
 	}
 		

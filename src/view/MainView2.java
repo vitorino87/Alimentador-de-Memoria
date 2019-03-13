@@ -75,7 +75,7 @@ public class MainView2 extends Activity {
 				mc = new ControladorDoDB(context);// instancia um MainControl com o contexto atual
 				mc.abrirConexao();// abre a conexão com o banco
 				String ideia = txtIdeia.getText().toString();// adiciona o texto adicionado pelo usuário na variável ideia
-				ideia = ideia.replace(",", ".");
+				ideia = ideia.replace(",", "\u0375");
 				if (!ideia.equals("")) { // se ideia não for ""
 					Long l = mc.inserirRow(ideia,"n", TABELA); // insere no DB a string ideia na tabela memoria
 					if (l > -1) { // se o método anterior retornar um valor maior que -1
@@ -97,6 +97,7 @@ public class MainView2 extends Activity {
 				mc = new ControladorDoDB(context);// instancia um MainControl com o contexto atual
 				mc.abrirConexao();// abre a conexão com o banco
 				String ideia = txtIdeia.getText().toString();// adiciona o texto adicionado pelo usuário na variável ideia
+				ideia = ideia.replace(",", "\u0375");
 				if (!ideia.equals("")) { // se ideia não for ""
 					Boolean l = mc.deletarRow(ideia, TABELA); // delete no DB a string ideia na tabela memoria
 					if (l) { // se return true
@@ -148,7 +149,7 @@ public class MainView2 extends Activity {
 		case 2:
 			ImportadorPreliminar i = new ImportadorPreliminar(MainView2.this);
 			boolean verifica=true;
-			ArrayList<String> listaDeErros = new ArrayList<String>();//serve para listar os itens que falharam
+			ArrayList<Object> listaDeErros = new ArrayList<Object>();//serve para listar os itens que falharam
 			ArrayList<String> lista = i.importar(requestCode, resultCode, data); 
 			Iterator<String> iterator = lista.iterator();	
 			while(iterator.hasNext()){
@@ -175,7 +176,7 @@ public class MainView2 extends Activity {
 				Long l = mc.inserirRow(valor.get(0), valor.get(1), TABELA);
 				if(l==-1){
 					verifica=false;
-					listaDeErros.add(valores);
+					listaDeErros.add(valor);
 				}
 			}
 			if(verifica)
