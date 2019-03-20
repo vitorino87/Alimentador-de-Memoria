@@ -36,6 +36,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	ViewGroup gi = null;
 	Menu menu = null;	
 	static boolean allcaps = false;
+	private static String bkp = "";
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
@@ -130,17 +131,17 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	@SuppressLint("DefaultLocale")
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	public static void carregar(String b){
+		bkp = b;
 		String a = null;
 		try {
 			a = new String(b.getBytes("UTF8"), StandardCharsets.UTF_8);
 			a = a.replace("\u0375", ",");
 		} catch (UnsupportedEncodingException e) {e.printStackTrace();}	
 		
-		if(allcaps){
+		if(allcaps)
 			ideia.setText(a.toUpperCase());
-		}else{
-			ideia.setText(a.toLowerCase());
-		}
+		else
+			ideia.setText(a);
 	}
 		
 	
@@ -183,12 +184,11 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		case R.id.item4:			
 			if (item.isChecked()) item.setChecked(false);
             else item.setChecked(true);			
-			allcaps = item.isChecked();	
-			if(allcaps){
+			allcaps = item.isChecked();				
+			if(allcaps)
 				ideia.setText(ideia.getText().toString().toUpperCase());
-			}else{
-				ideia.setText(ideia.getText().toString().toLowerCase());
-			}			
+			else
+				ideia.setText(bkp);
 			break;
 		case R.id.item5:
 			if(mc.addOrDelDeadFile(TABELA, ideia.getText().toString(), "n")!=2){
@@ -290,20 +290,5 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	    MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	
 	    this.menu = menu;
 	    return mmv.chamarMenuInicial(R.menu.menu);	    
-	}
-	
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-	public void teste(){
-		MenuItem mi = menu.getItem(3);	
-		mi.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-			
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		});
-		boolean a = mi.isChecked();		
-		ideia.setAllCaps(a);
 	}
 }
