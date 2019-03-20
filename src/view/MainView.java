@@ -1,5 +1,6 @@
 package view;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
@@ -15,7 +16,6 @@ import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,7 +34,8 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	static EditText ideia = null;
 	final String TABELA="memoria";
 	ViewGroup gi = null;
-	Menu menu = null;
+	Menu menu = null;	
+	static boolean allcaps = false;
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
@@ -66,6 +67,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 				return true;
 			}
 		});
+		
 		//faz a busca e carrega os dados do banco num cursor
 		loadIdeias();
 		//move o cursor para o primeiro elemento retornado do banco
@@ -83,10 +85,9 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	@SuppressLint("NewApi")
 	public static void carregarIdeia(){
 		try{			
-			String b = mc.nextResult();
-			String a = new String(b.getBytes("UTF8"), StandardCharsets.UTF_8);	
-			a = a.replace("\u0375", ",");
-			ideia.setText(a);			
+			String b = mc.nextResult();			
+			carregar(b);
+			//ideia.setText(a);			
 		}catch(Exception ex){}		
 	}
 		
@@ -96,7 +97,8 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	public static void carregarFirst(){
 		try{
 			String b = mc.initialResult();
-			ideia.setText(b);
+			carregar(b);
+			//ideia.setText(b);
 			
 		}catch(Exception ex){			
 		}
@@ -109,17 +111,35 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		try{
 			String b = mc.previousResult();
 			if(!b.equals(""))
-				ideia.setText(b);
+				carregar(b);
+				//ideia.setText(b);
 		}catch(Exception ex){			
 		}		
 	}
 	
 	public static void carregarIdeia(int posicao){
 		try{
-			String b = mc.currentResult(posicao); 
-			ideia.setText(b);
+			String b = mc.currentResult(posicao);
+			carregar(b);
+			//ideia.setText(b);
 		}catch(Exception ex){
 			
+		}
+	}
+	
+	@SuppressLint("DefaultLocale")
+	@TargetApi(Build.VERSION_CODES.KITKAT)
+	public static void carregar(String b){
+		String a = null;
+		try {
+			a = new String(b.getBytes("UTF8"), StandardCharsets.UTF_8);
+			a = a.replace("\u0375", ",");
+		} catch (UnsupportedEncodingException e) {e.printStackTrace();}	
+		
+		if(allcaps){
+			ideia.setText(a.toUpperCase());
+		}else{
+			ideia.setText(a.toLowerCase());
 		}
 	}
 		
@@ -129,6 +149,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	 * @author Tiago Vitorino
 	 * @since 16/02/2019 
 	 */
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
@@ -158,6 +179,17 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 				Toast.makeText(context, "Não há Dead Files", Toast.LENGTH_LONG).show();					
 			}
 			break;		
+			
+		case R.id.item4:			
+			if (item.isChecked()) item.setChecked(false);
+            else item.setChecked(true);			
+			allcaps = item.isChecked();	
+			if(allcaps){
+				ideia.setText(ideia.getText().toString().toUpperCase());
+			}else{
+				ideia.setText(ideia.getText().toString().toLowerCase());
+			}			
+			break;
 		case R.id.item5:
 			if(mc.addOrDelDeadFile(TABELA, ideia.getText().toString(), "n")!=2){
 				Toast.makeText(context, "Removido do arquivo morto", Toast.LENGTH_LONG).show();
@@ -254,9 +286,24 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	}		
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {	    
+	public boolean onCreateOptionsMenu(Menu menu) {	    	    
+	    MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	
 	    this.menu = menu;
-	    MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
-	    return mmv.chamarMenuInicial(R.menu.menu);
+	    return mmv.chamarMenuInicial(R.menu.menu);	    
+	}
+	
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	public void teste(){
+		MenuItem mi = menu.getItem(3);	
+		mi.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+			
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
+		boolean a = mi.isChecked();		
+		ideia.setAllCaps(a);
 	}
 }
