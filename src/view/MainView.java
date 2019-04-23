@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -138,12 +139,23 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			a = a.replace("\u0375", ",");
 		} catch (UnsupportedEncodingException e) {e.printStackTrace();}	
 		
+//		if(a.length()>15)
+//			ideia.setGravity(Gravity.FILL);
+//		else
+//			ideia.setGravity(Gravity.CENTER);
+		
 		if(allcaps)
 			ideia.setText(a.toUpperCase());
 		else
 			ideia.setText(a);
-	}
 		
+		if(ideia.getLineCount()>1)
+			ideia.setGravity(Gravity.FILL);
+		else
+			ideia.setGravity(Gravity.CENTER);				
+	}
+	
+	
 	
 	/**Explicação:
 	 * Método executado ao tocar em algum item do menu

@@ -14,7 +14,7 @@
         android:ems="12"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:gravity="center_vertical|center_horizontal|center"
+        android:gravity="fill"
         android:selectable="false"
         android:text="neighbor advertisement"
         android:textSize="36sp" >
