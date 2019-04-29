@@ -21,8 +21,9 @@ public final class R {
         public static final int item2=0x7f080008;
         public static final int item3=0x7f080009;
         public static final int item4=0x7f08000a;
-        public static final int item5=0x7f08000b;
-        public static final int item6=0x7f08000c;
+        public static final int item5=0x7f08000c;
+        public static final int item6=0x7f08000d;
+        public static final int item7=0x7f08000b;
         public static final int linearLayout=0x7f080000;
     }
     public static final class integer {

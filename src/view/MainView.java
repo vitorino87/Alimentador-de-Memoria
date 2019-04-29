@@ -30,13 +30,14 @@ import controller.GuardadorDeEstadosTemplate;
 
 public class MainView extends TelaTemplate implements OnTouchListener, OnGestureListener{	
 	static ControladorDoDB mc = null;		
-	LinearLayout ll = null;		
+	static LinearLayout ll = null;		
 	public static Context context;
 	static EditText ideia = null;
 	final String TABELA="memoria";
 	ViewGroup gi = null;
 	Menu menu = null;	
 	static boolean allcaps = false;
+	static boolean isColored = true;
 	private static String bkp = "";
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -152,7 +153,15 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		if(ideia.getLineCount()>1)
 			ideia.setGravity(Gravity.FILL);
 		else
-			ideia.setGravity(Gravity.CENTER);				
+			ideia.setGravity(Gravity.CENTER);			
+		if(isColored){
+			controller.GeradorDeCorRandomizado gcr = new controller.GeradorDeCorRandomizado();
+			String cor = gcr.gerarCorRandomizada();
+			ll.setBackgroundColor(Color.parseColor("#"+cor));
+			ideia.setBackgroundColor(Color.parseColor("#FFFFFF"));
+		}else
+			ll.setBackgroundColor(Color.parseColor("#FFFFFF"));
+		
 	}
 	
 	
@@ -226,6 +235,14 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			menu.clear();
 			MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
 		    mmv.chamarMenuInicial(R.menu.menu);
+			break;
+			
+		case R.id.item7:
+			if(item.isChecked())
+				item.setChecked(false);
+			else
+				item.setChecked(true);				
+			isColored=item.isChecked();		
 			break;
 		}
 		return super.onOptionsItemSelected(item);
