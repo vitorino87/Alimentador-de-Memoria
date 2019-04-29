@@ -30,7 +30,7 @@ import controller.GuardadorDeEstadosTemplate;
 
 public class MainView extends TelaTemplate implements OnTouchListener, OnGestureListener{	
 	static ControladorDoDB mc = null;		
-	LinearLayout ll = null;		
+	static LinearLayout ll = null;		
 	public static Context context;
 	static EditText ideia = null;
 	final String TABELA="memoria";
@@ -152,7 +152,12 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		if(ideia.getLineCount()>1)
 			ideia.setGravity(Gravity.FILL);
 		else
-			ideia.setGravity(Gravity.CENTER);				
+			ideia.setGravity(Gravity.CENTER);			
+		
+		controller.GeradorDeCorRandomizado gcr = new controller.GeradorDeCorRandomizado();
+		String cor = gcr.gerarCorRandomizada();
+		ll.setBackgroundColor(Color.parseColor("#"+cor));
+		ideia.setBackgroundColor(Color.parseColor("#FFFFFF"));
 	}
 	
 	
