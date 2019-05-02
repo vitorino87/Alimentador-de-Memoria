@@ -9,9 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class Banco extends SQLiteOpenHelper
 {
 	//Controle da versão
-	private static final int VERSAO_BANCO = 2;
+	private static final int VERSAO_BANCO = 3;
 	//Cria a tabela com _id sequencial
-	private static final String SCRIPT_TABLE_CREATE= "create table memoria(id integer primary key autoincrement, ideia text, morto text);";	
+	private static final String SCRIPT_TABLE_CREATE= "create table memoria(id integer primary key autoincrement, ideia text, morto text, tag integer);";	
 	
 	public Banco(Context context, String nomeBanco) {//criando o banco
 		super(context, nomeBanco, null, VERSAO_BANCO);
@@ -125,15 +125,25 @@ public class Banco extends SQLiteOpenHelper
 	}
 	
 	/**
-	 * Método para retornar Todos resultados da tabela fornecida
+	 * Método para retornar Todos resultados da tabela com as devidas caracteristicas solicitadas
+	 * Um por vez: ou só dead files, ou só tag, ou tudo.
 	 * @param db - SQLiteDatabase que irá receber o método
 	 * @param tabela - nome da tabela que será afetada
+	 * @param morto - escolha "s" para sim, "n" para não, "t" para tudo e "" para ignorar
+	 * @param tag - informe a tag
 	 * @return o Cursor com todos os resultados ou null se não encontrou nada
 	 */
-	public Cursor retornarTodosResultados(SQLiteDatabase db, String tabela){
+	public Cursor retornarTodosResultados(SQLiteDatabase db, String tabela, String morto, String tag){
 		Cursor c = null;
-		String[] args = {"n"};
-		c = db.query(tabela, null, "morto=?", args, null, null, null);
+		if(morto.equals("t"))
+			c = db.query(tabela, null, null, null, null, null, null);
+		else if(!tag.equals("0")){	
+			String[] args = {tag};
+			c = db.query(tabela, null, "tag=?", args, null, null, null);
+		}else{
+			String[] args = {morto};
+			c = db.query(tabela, null, "morto=?", args, null, null, null);					
+		}
 		return c;
 	}
 	
@@ -161,39 +171,12 @@ public class Banco extends SQLiteOpenHelper
 	 * @param tabela
 	 * @return
 	 */
-	public Cursor retornarTodosDeadFiles(SQLiteDatabase db, String tabela){
-		Cursor c = null;
-		String[] args = {"s"};
-		c = db.query(tabela, null, "morto=?", args, null, null, null);
-		int a = c.getCount();
-		return c;
-	}
-	
-	/*public void exportarToCSV(SQLiteDatabase db, String tabela){
-		Cursor c = retornarTodosResultados(db, tabela);
-		int a = c.getColumnCount();
-	}*/
-	
-	/*public File getPublicAlbumStorageDir(String albumName) {
-	    // Get the directory for the user's public pictures directory.
-	    File file = new File(Environment.getExternalStoragePublicDirectory(
-	            Environment.DIRECTORY_PICTURES), albumName);
-	    if (!file.mkdirs()) {
-	        Log.e("FeedMemo", "Directory not created");
-	    }
-	    return file;
-	}*/
-	
-	/*public void salvarLinhasProcessadas(String file, String textoParaSalvar) {
-        try {
-            if (file != null) {
-            	FileWriter fw = new FileWriter(file, true);
-            	fw.write(textoParaSalvar);
-            }
-        } catch (Exception ex) {
-        	Log.e("FeedMemo", "File not created");
-        }
-    }*/
+//	public Cursor oretornarTodosDeadFiles(SQLiteDatabase db, String tabela){
+//		Cursor c = null;
+//		String[] args = {"s"};
+//		c = db.query(tabela, null, "morto=?", args, null, null, null);		
+//		return c;
+//	}
 }
 	
 

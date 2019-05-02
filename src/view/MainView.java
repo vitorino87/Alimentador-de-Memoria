@@ -3,9 +3,7 @@ package view;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
-
 import com.example.alimentadordememoria.R;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -80,7 +78,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	/**
 	 * Método para carregar todos os resultados da tabela memoria do banco
 	 */
-	public static void loadIdeias(){mc.retornarTodosResultados("memoria");}
+	public static void loadIdeias(){mc.retornarTodosResultados("memoria","n","0");}
 	
 	/**
 	 * Método para carregar a ideia no EditText
@@ -175,6 +173,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
+		JanelaDeTags jt = new JanelaDeTags(MainView.this, mc, TABELA, ideia.getText().toString(),menu);
 		switch (id) {
 		case R.id.item1:					
 			mc.armazenarPositionDoCursor();//esse método armazena a posição do Cursor, antes de chamar a próxima tela 			
@@ -184,7 +183,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		case R.id.item2:
 			if(mc.addOrDelDeadFile(TABELA, ideia.getText().toString(),"s")!=-2){
 				Toast.makeText(context, "Adicionado ao arquivo morto", Toast.LENGTH_LONG).show();	
-				mc.retornarTodosResultados(TABELA);			
+				mc.retornarTodosResultados(TABELA,"n","0");			
 				carregarIdeia();
 			}else{
 				Toast.makeText(context, "Não foi possível adicionar ao arquivo morto", Toast.LENGTH_LONG).show();
@@ -221,7 +220,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 					MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
 				    mmv.chamarMenuInicial(R.menu.menu);
 					Toast.makeText(context, "Não há Dead Files, por isso Retornou", Toast.LENGTH_LONG).show();
-					mc.retornarTodosResultados(TABELA);	
+					mc.retornarTodosResultados(TABELA,"n","0");	
 					carregarIdeia();
 				}
 				
@@ -230,11 +229,12 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			}
 			break;
 		case R.id.item6:
-			mc.retornarTodosResultados(TABELA);			
-			carregarIdeia();
-			menu.clear();
-			MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
-		    mmv.chamarMenuInicial(R.menu.menu);
+//			mc.retornarTodosResultados(TABELA,"n",null);			
+//			carregarIdeia();
+//			menu.clear();
+//			MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
+//		    mmv.chamarMenuInicial(R.menu.menu);
+			retornar();
 			break;
 			
 		case R.id.item7:
@@ -244,8 +244,33 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 				item.setChecked(true);				
 			isColored=item.isChecked();		
 			break;
+			
+		case R.id.item8:			
+			jt.onCreateDialog(0).show();		
+			//mc.addOrChangeTag(TABELA, ideia.getText().toString(), jt.getTag());
+			break;
+			
+		case R.id.itemVisualizarItensTag:
+			jt.onCreateDialog(2).show();
+			break;
+			
+		case R.id.itemChangeTag:
+			jt.onCreateDialog(1).show();
+			break;
+			
+		case R.id.itemTagRetornar:
+			retornar();
+			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	public void retornar(){
+		mc.retornarTodosResultados(TABELA,"n","0");			
+		carregarIdeia();
+		menu.clear();
+		MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
+	    mmv.chamarMenuInicial(R.menu.menu);
 	}
 		
 	/**
@@ -320,4 +345,6 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	    this.menu = menu;
 	    return mmv.chamarMenuInicial(R.menu.menu);	    
 	}
+	
+	
 }
