@@ -74,51 +74,63 @@
     </display>  
   </class>  
   <dependency id="9">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <generalization id="10">    
     <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <dependency id="10">    
-    <bendpoint x="444" y="37"/>    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
   <association id="11">    
     <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="12" name="banco"/>      
-      <multiplicity id="13" minimum="0" maximum="1"/>    
+      <attribute id="12" name="banco">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="13" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="14">    
-    <bendpoint x="155" y="446"/>    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="15" name="mc"/>      
-      <multiplicity id="16" minimum="0" maximum="1"/>    
+  <dependency id="14">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="15">    
+    <bendpoint x="444" y="37"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <generalization id="16">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <association id="17">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="18" name="mc">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="19" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="17">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="5"/>  
-  </dependency>  
-  <generalization id="18">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <dependency id="19">    
+  <dependency id="20">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="3"/>  
   </dependency>  
-  <generalization id="20">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="2"/>  
-  </generalization>  
   <association id="21">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="22" name="mc"/>      
-      <multiplicity id="23" minimum="0" maximum="1"/>    
+    <bendpoint x="155" y="446"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="22" name="mc">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="23" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  

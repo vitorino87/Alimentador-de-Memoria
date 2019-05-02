@@ -37,6 +37,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	static boolean allcaps = false;
 	static boolean isColored = true;
 	private static String bkp = "";
+	private JanelaDeTags jt;
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
@@ -47,7 +48,8 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		setContentView(R.layout.tela1);	//Carrega a tela1	
 		ll = (LinearLayout)findViewById(R.id.linearLayout);//conecta o linearLayout a variável ll
 		gestureDetector = new GestureDetector(MainView.this, MainView.this);//instancia o gesture para trabalhar com os gestos na tela
-		ideia = (EditText)findViewById(R.id.editText1);//conecta o editText1 a variável ideia								
+		ideia = (EditText)findViewById(R.id.editText1);//conecta o editText1 a variável ideia			
+		
 		//método para adicionar a ação de Touch no LinearLayout
 		ll.setOnTouchListener(new OnTouchListener() {			
 			@Override
@@ -162,8 +164,6 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		
 	}
 	
-	
-	
 	/**Explicação:
 	 * Método executado ao tocar em algum item do menu
 	 * @author Tiago Vitorino
@@ -172,8 +172,9 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		JanelaDeTags jt = new JanelaDeTags(MainView.this, mc, TABELA, ideia.getText().toString(),menu);
+		jt = new JanelaDeTags(MainView.this, mc, TABELA, ideia.getText().toString(),menu);
+		int id = item.getItemId();		
+		int a;
 		switch (id) {
 		case R.id.item1:					
 			mc.armazenarPositionDoCursor();//esse método armazena a posição do Cursor, antes de chamar a próxima tela 			
@@ -181,9 +182,11 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			startActivity(it);//Inicia o método onCreate da classe MainView2			
 			break;
 		case R.id.item2:
+			a = mc.armazenarPositionDoCursor();
 			if(mc.addOrDelDeadFile(TABELA, ideia.getText().toString(),"s")!=-2){
 				Toast.makeText(context, "Adicionado ao arquivo morto", Toast.LENGTH_LONG).show();	
-				mc.retornarTodosResultados(TABELA,"n","0");			
+				mc.retornarTodosResultados(TABELA,"n","0");	
+				mc.goToPositionCursor(a-1);
 				carregarIdeia();
 			}else{
 				Toast.makeText(context, "Não foi possível adicionar ao arquivo morto", Toast.LENGTH_LONG).show();
@@ -211,16 +214,18 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 				ideia.setText(bkp);
 			break;
 		case R.id.item5:
+			a = mc.armazenarPositionDoCursor();
 			if(mc.addOrDelDeadFile(TABELA, ideia.getText().toString(), "n")!=2){
 				Toast.makeText(context, "Removido do arquivo morto", Toast.LENGTH_LONG).show();
 				if(mc.resultDeadFiles(TABELA)){
+					mc.goToPositionCursor(a-1);
 					carregarIdeia();
 				}else{
 					menu.clear();
 					MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
 				    mmv.chamarMenuInicial(R.menu.menu);
 					Toast.makeText(context, "Não há Dead Files, por isso Retornou", Toast.LENGTH_LONG).show();
-					mc.retornarTodosResultados(TABELA,"n","0");	
+					mc.retornarTodosResultados(TABELA,"n","0");						
 					carregarIdeia();
 				}
 				
