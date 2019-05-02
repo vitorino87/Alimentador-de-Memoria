@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -22,6 +23,9 @@ public class JanelaDeTags {
 	String ideia;
 	TextView tx = null;
 	Menu menu;
+	private int a;
+	MenuDoMainView mmv;
+	static private int tagCarregada;
 		
 	public int getTag() {
 		return tag;
@@ -55,23 +59,37 @@ public class JanelaDeTags {
 	    tx = (TextView)layout.findViewById(R.id.textViewTag);
 	    //String msg = "";
 	    String msg[] = {"Adicionar tag","Alterar para tag","Carregar tag..."};
-	    
+	    mmv = new MenuDoMainView(ac, menu);
 	    switch(choose){
 		case 0:
 		case 1:
-			tx.setText(msg[choose]);			
+			tx.setText(msg[choose] + "\nTag Atual: "+mc.getTagAtual());			
 			alert.setView(layout)
 			.setTitle(msg[choose])
 			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 	               @Override
 	               public void onClick(DialogInterface dialog, int id) {            	                     
-	            	   try { 	            		               		   
-	            		   int tag = Integer.parseInt(((EditText) layout.findViewById(R.id.editTextTag)).getText().toString());            		   
+	            	   try { 	    
+	            		   a = mc.armazenarPositionDoCursor();
+	            		   int tag = Integer.parseInt(((EditText) layout.findViewById(R.id.editTextTag)).getText().toString());  	            		   
 	            		   mc.addOrChangeTag(tabela, ideia, tag);	  
-	            		   if(choose==0)
+	            		   if(choose==0){
 	            			   Toast.makeText(ac, "Adicionado na tag "+tag, Toast.LENGTH_LONG).show();
-	            		   else
+	            		   	   mc.retornarTodosResultados(tabela, "n", "0");
+	            		   	   mc.goToPositionCursor(a-1);	            		   	   
+	            		   }else{	            			   
 	            			   Toast.makeText(ac, "Alterado para tag " +tag, Toast.LENGTH_LONG).show();
+	            			   mc.retornarTodosResultados(tabela, "", String.valueOf(tagCarregada));
+	            			   if(mc.initialResult()!=""){
+	            				   mc.goToPositionCursor(a-1);	            				   
+	            			   }else{
+	            				   menu.clear();
+	            				   mmv.chamarMenuInicial(R.menu.menu);
+	            				   mc.retornarTodosResultados(tabela, "n", "0");	            				   
+	            				   Toast.makeText(ac, "Retornou porque não há mais tag "+tagCarregada, Toast.LENGTH_LONG).show();
+	            			   }	            			   
+	            		   }
+	            		   MainView.carregarIdeia();
 	            		   
 					} catch (NumberFormatException e) {
 						// TODO Auto-generated catch block
@@ -93,22 +111,20 @@ public class JanelaDeTags {
 			.setTitle(msg[choose])		
 			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 	               @Override
-	               public void onClick(DialogInterface dialog, int id) {            	                     
-	            	   try { 	            		               		   
-	            		   int tag = Integer.parseInt(((EditText) layout.findViewById(R.id.editTextTag)).getText().toString());            		   	            		   
-	            		   mc.retornarTodosResultados(tabela,"",String.valueOf(tag));
-	            		   mc.initialResult();
-	            		   Toast.makeText(ac, "Carregado tag "+tag, Toast.LENGTH_LONG).show();	            		   
-	            			MainView.carregarIdeia();            		  
-	            			menu.clear();
-	           				MenuDoMainView mmv = new MenuDoMainView(ac, menu);	   
-	           				mmv.chamarMenuInicial(R.menu.menutags);
-	            		   
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						Toast.makeText(ac, "Não foi possível carregar a tag", Toast.LENGTH_LONG).show();
-						e.printStackTrace();
-					}
+	               public void onClick(DialogInterface dialog, int id) {    
+	            	   int a = mc.armazenarPositionDoCursor();   //armazenado a posição atual do cursor
+	            	   tagCarregada = Integer.parseInt(((EditText) layout.findViewById(R.id.editTextTag)).getText().toString()); 	            	   
+	            	   mc.retornarTodosResultados(tabela,"",String.valueOf(tagCarregada));
+	            	   if(mc.initialResult()!=""){
+	            		   Toast.makeText(ac, "Carregada tag "+tagCarregada, Toast.LENGTH_LONG).show();	            		   	            		              		 
+	            		   menu.clear();	           					  
+	            		   mmv.chamarMenuInicial(R.menu.menutags);	
+	            	   }else{
+	            		   Toast.makeText(ac, "Não foi possível carregar a tag", Toast.LENGTH_LONG).show();
+	            		   mc.retornarTodosResultados(tabela, "n", "0");
+	            		   mc.goToPositionCursor(a-1);			//utilizando a posição atual do cursor
+	            	   }
+	            	   MainView.carregarIdeia(); 
 	               }
 	           })
 	           .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {

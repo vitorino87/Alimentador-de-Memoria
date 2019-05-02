@@ -92,11 +92,17 @@ public class ControladorDoDB {
 	
 	public String initialResult(){
 		String b="";
-		cursor.moveToFirst();
-		b = cursor.getString(1);
+		if(cursor.moveToFirst())
+			b = cursor.getString(1);
 		return b;
 		
 	}	
+	
+	public int getTagAtual(){
+		int b=-1;
+		b = cursor.getInt(3);
+		return b;
+	}
 	
 	public String nextResult(){
 		String b="";			
