@@ -146,6 +146,30 @@ public class Banco extends SQLiteOpenHelper
 		}
 		return c;
 	}
+	/**
+	 * Método para retornar todos resultados que estão de acordo com as caracteristicas adicionadas
+	 * @param db - SQLiteDatabase
+	 * @param tabela - tabela que será consultada
+	 * @param operacao - informe a operação desejada<ul><li>1 - todos</li><li>2 - tag</li><li>3 - morto</li></ul>
+	 * @param info - opcional, informe a informação a ser buscada. Funciona somente para operação 2 e 3;
+	 * @return um cursor com o resultado obtido
+	 */
+	public Cursor retornarTodosResultados(SQLiteDatabase db, String tabela, int operacao, String info){
+		Cursor c = null;
+		String[] args = {info};
+		switch(operacao){
+		case 1:
+			c = db.query(tabela, null, null, null, null, null, null);
+			break;
+		case 2:			
+			c = db.query(tabela, null, "tag=?", args, null, null, null);
+			break;
+		case 3:			
+			c = db.query(tabela, null, "morto=?", args, null, null, null);
+			break;
+		}				
+		return c;
+	}
 	
 	public int deletarIdeia(String ideia, SQLiteDatabase db, String tabela){
 		int a=-2;
