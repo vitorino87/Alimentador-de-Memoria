@@ -30,7 +30,7 @@ public class ControladorDoDB {
 	
 	public void atualizarCursorAposInserirIdeia(String tabela){
 		if(position!=-1){
-			retornarTodosResultados(tabela,"n",null);
+			retornarTodosResultados(tabela,"n","0");
 			goToPositionCursor();
 			position=-1;
 		}
@@ -82,7 +82,7 @@ public class ControladorDoDB {
 	 * Um por vez: ou só dead files, ou só tag, ou tudo.
 	 * @param tabela - nome da tabela que será afetada
 	 * @param dead - escolha "s" para sim, "n" para não, "t" para tudo e "" para ignorar
-	 * @param tag - informe a tag
+	 * @param tag - informe a tag, escolha "0" para padrão, "" para ignorar ou algum número de tag salva
 	 */
 	public void retornarTodosResultados(String tabela, String dead, String tag){
 		abrirConexao();
@@ -181,7 +181,7 @@ public class ControladorDoDB {
 	
 	public boolean resultDeadFiles(String tabela){
 		abrirConexao();		
-		cursor = banco.retornarTodosResultados(db, tabela, "s",null);
+		cursor = banco.retornarTodosResultados(db, tabela, "s","0");
 		if(cursor.moveToFirst()){
 			return true;
 		}else{
