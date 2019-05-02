@@ -87,6 +87,7 @@ public class ControladorDoDB {
 	public void retornarTodosResultados(String tabela, String dead, String tag){
 		abrirConexao();
 		cursor = banco.retornarTodosResultados(db, tabela, dead, tag);
+		//cursor = banco.retornarTodosResultados(db, tabela, 1, "n");
 	}
 	
 	public String initialResult(){
