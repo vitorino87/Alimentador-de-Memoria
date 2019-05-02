@@ -6,13 +6,13 @@ import android.os.Build;
 
 public class GeradorDeCSV {			
 	final String CHAVEPRIMARIA = "id";
-	final String ULTIMACOLUNA = "morto";
+	final String ULTIMACOLUNA = "tag";
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public String getCSV(ControladorDoDB mc, String TABELA){
 		mc.abrirConexao();
-		mc.retornarTodosResultados(TABELA);
-		Cursor cursor = mc.getCursor();
+		mc.retornarTodosResultados(TABELA, "t", "");
+		Cursor cursor = mc.getCursor();		
 		String csv="";
 		int qtdeColunas = cursor.getColumnCount();
 		int qtdeDeRows = cursor.getCount();		

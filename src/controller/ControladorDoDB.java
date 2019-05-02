@@ -30,7 +30,7 @@ public class ControladorDoDB {
 	
 	public void atualizarCursorAposInserirIdeia(String tabela){
 		if(position!=-1){
-			retornarTodosResultados(tabela);
+			retornarTodosResultados(tabela,"n","0");
 			goToPositionCursor();
 			position=-1;
 		}
@@ -56,23 +56,20 @@ public class ControladorDoDB {
 	}
 
 	//Retorna o primeiro cursor
-	public Cursor irParaPrimeiroCursor() {
-		Cursor d = null;
-		if (!cursor.moveToFirst()) {
-
-		}
-		return d;
-	}
+//	public Cursor irParaPrimeiroCursor() {
+//		Cursor d = null;
+//		if (!cursor.moveToFirst()) {
+//
+//		}
+//		return d;
+//	}
 
 	// fechando banco
 	public void fecharConexao() {
 		try{
-			//c.close();
 			banco.close();
-		}catch(Exception ex){
-			
-		}
-		
+		}catch(Exception ex){			
+		}		
 	}
 
 	// conectar no banco
@@ -80,10 +77,16 @@ public class ControladorDoDB {
 		db = banco.getWritableDatabase();
 	}
 	
-	public void retornarTodosResultados(String tabela){
+	/**
+	 * Método para retornar Todos resultados da tabela com as devidas caracteristicas solicitadas
+	 * Um por vez: ou só dead files, ou só tag, ou tudo.
+	 * @param tabela - nome da tabela que será afetada
+	 * @param dead - escolha "s" para sim, "n" para não, "t" para tudo e "" para ignorar
+	 * @param tag - informe a tag, escolha "0" para padrão, "" para ignorar ou algum número de tag salva
+	 */
+	public void retornarTodosResultados(String tabela, String dead, String tag){
 		abrirConexao();
-		cursor = banco.retornarTodosResultados(db, tabela);
-		//c.moveToFirst();
+		cursor = banco.retornarTodosResultados(db, tabela, dead, tag);
 	}
 	
 	public String initialResult(){
@@ -118,18 +121,18 @@ public class ControladorDoDB {
 			b = cursor.getString(1);
 		}else{
 			cursor.moveToLast();
-			b = cursor.getString(1);
-			/*previous = true;*/			
+			b = cursor.getString(1);	
 		}
 		return b;
 	}
 	
-	public Long inserirRow(Object ideia, Object morto, String tabela){
+	public Long inserirRow(Object ideia, Object morto, String tabela, int tag){
 		if(!banco.buscar(db, (String)ideia,tabela)){
 			ContentValues cv = new ContentValues();
 			cv.put("morto", (String)morto);
 			cv.put("ideia", (String)ideia);
-			Long a = banco.inserir(db, cv, tabela);
+			cv.put("tag", tag);
+			Long a = banco.inserir(db, cv, tabela);			
 			return a;
 		}else{
 			return -1L;
@@ -153,21 +156,32 @@ public class ControladorDoDB {
 		this.cursor = cursor;
 	}
 	
-	public int addOrDelDeadFile(String tabela, String ideia, String dead){
-		abrirConexao();
-		ContentValues cv = new ContentValues();
-		cv.put("morto", dead);
+	public int atualizarDB(ContentValues cv, String tabela, String ideia){
+		abrirConexao();		
 		int a = banco.atualizarIdeia(db, cv, tabela, ideia);
 		if(a!=-2){
 			cursor = null;
 		}
 		return a;
+	}
+	
+	public int addOrChangeTag(String tabela, String ideia, int tag){
+		ContentValues cv = new ContentValues();
+		cv.put("tag", tag);
+		int a = atualizarDB(cv, tabela, ideia);
+		return a;
+	}
+	
+	public int addOrDelDeadFile(String tabela, String ideia, String dead){
+		ContentValues cv = new ContentValues();
+		cv.put("morto", dead);
+		int a = atualizarDB(cv, tabela, ideia);
+		return a;
 	}		
 	
 	public boolean resultDeadFiles(String tabela){
 		abrirConexao();		
-		cursor = banco.retornarTodosDeadFiles(db, tabela);
-		int a = cursor.getCount();
+		cursor = banco.retornarTodosResultados(db, tabela, "s","0");
 		if(cursor.moveToFirst()){
 			return true;
 		}else{

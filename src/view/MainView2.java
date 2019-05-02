@@ -77,7 +77,7 @@ public class MainView2 extends Activity {
 				String ideia = txtIdeia.getText().toString();// adiciona o texto adicionado pelo usuário na variável ideia
 				ideia = ideia.replace(",", "\u0375");
 				if (!ideia.equals("")) { // se ideia não for ""
-					Long l = mc.inserirRow(ideia,"n", TABELA); // insere no DB a string ideia na tabela memoria
+					Long l = mc.inserirRow(ideia,"n", TABELA,0); // insere no DB a string ideia na tabela memoria
 					if (l > -1) { // se o método anterior retornar um valor maior que -1
 						Toast.makeText(context, "Ideia Salva!", Toast.LENGTH_SHORT).show();
 					} else {
@@ -154,26 +154,28 @@ public class MainView2 extends Activity {
 			Iterator<String> iterator = lista.iterator();	
 			while(iterator.hasNext()){
 				String valores = iterator.next();				
-				ArrayList<Object> valor = new ArrayList<Object>();//variavel para armazenar os valores								
+				ArrayList<String> valor = new ArrayList<String>();//variavel para armazenar os valores								
 				int a = 0;//variavel para realizar a contagem da string atual
 				while(!valores.isEmpty()){ //irá iterar até ser empty					
-					if(valores.charAt(a)==',' || a==valores.length()-1){
-						String ideia = valores.substring(0, a+1);	
+					if(valores.charAt(a)==','){
+						String ideia = valores.substring(0, a);	
+			
+						if(ideia.charAt(0)==34 && ideia.charAt(a-1)==34)//checando se há aspas no inicio e fim da ideia
+							ideia = ideia.substring(1, a-1); //removendo as aspas																		
+
 						if(ideia.contains(","))
-							ideia = ideia.replace(",", "");
-						if(ideia.charAt(0)==34 && ideia.charAt(a-1)==34){//checando se há aspas no inicio e fim da ideia
-							ideia = ideia.substring(1, a-1); //removendo as aspas								
-						}												
+							ideia = ideia.replace(",", "\u0375");																		
 						valor.add(ideia);//inserindo a palavra												
-						valores = valores.substring(a);//reduz a variavel valores e pula virgula
-						if(valores.length()==1)
-							valores = "";
+						valores = valores.substring(++a);//reduz a variavel valores e pula virgula
+						if(valores.length()==1){
+							valor.add(valores);
+							valores="";
+						}							
 						a=0;//zerando a contagem
 					}
 					a++;						
-					//String mIdeia = valores.substring(valores.indexOf("\""), valores.) ;
 				}							
-				Long l = mc.inserirRow(valor.get(0), valor.get(1), TABELA);
+				Long l = mc.inserirRow(valor.get(0), valor.get(1), TABELA, Integer.valueOf(valor.get(2)));
 				if(l==-1){
 					verifica=false;
 					listaDeErros.add(valor);
