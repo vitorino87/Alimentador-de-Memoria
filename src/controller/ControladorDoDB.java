@@ -108,6 +108,10 @@ public class ControladorDoDB {
 		return b;
 	}
 	
+	public int getTagMax(){
+		return banco.getTagMax(db);
+	}
+	
 	public String nextResult(){
 		String b="";			
 		if(!cursor.isLast())

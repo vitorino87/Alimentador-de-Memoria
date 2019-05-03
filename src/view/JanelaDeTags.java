@@ -156,11 +156,12 @@ public class JanelaDeTags {
 			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 	               @Override
 	               public void onClick(DialogInterface dialog, int id) {            	                     
-	            	   try { 	    
+	            	   try { 	    	            		   
 	            		   a = mc.armazenarPositionDoCursor();
 	            		   //int tag = Integer.parseInt(((EditText) layout.findViewById(R.id.editTextTag)).getText().toString());
 	            		   int tag = Integer.parseInt(edt.getText().toString());
-	            		   mc.addOrChangeTag(tabela, ideia, tag);	  
+	            		   mc.addOrChangeTag(tabela, ideia, tag);	 
+	            		   MainView.tagMax.setText("Tag Max: "+mc.getTagMax());
 	            		   if(choose==0){
 	            			   Toast.makeText(ac, "Adicionado na tag "+tag, Toast.LENGTH_LONG).show();
 	            		   	   mc.retornarTodosResultados(tabela, "n", "0");
