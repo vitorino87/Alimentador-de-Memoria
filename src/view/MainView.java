@@ -22,6 +22,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import controller.ControladorDoDB;
 import controller.GuardadorDeEstadosTemplate;
@@ -38,6 +39,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	static boolean isColored = true;
 	private static String bkp = "";
 	private JanelaDeTags jt;
+	private static TextView tagView = null;
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
@@ -48,7 +50,8 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		setContentView(R.layout.tela1);	//Carrega a tela1	
 		ll = (LinearLayout)findViewById(R.id.linearLayout);//conecta o linearLayout a variável ll
 		gestureDetector = new GestureDetector(MainView.this, MainView.this);//instancia o gesture para trabalhar com os gestos na tela
-		ideia = (EditText)findViewById(R.id.editText1);//conecta o editText1 a variável ideia			
+		ideia = (EditText)findViewById(R.id.editText1);//conecta o editText1 a variável ideia
+		tagView = (TextView) findViewById(R.id.textView1);
 		
 		//método para adicionar a ação de Touch no LinearLayout
 		ll.setOnTouchListener(new OnTouchListener() {			
@@ -161,6 +164,8 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			ideia.setBackgroundColor(Color.parseColor("#FFFFFF"));
 		}else
 			ll.setBackgroundColor(Color.parseColor("#FFFFFF"));
+		
+		tagView.setText("Tag: "+mc.getTagAtual());
 		
 	}
 	

@@ -11,25 +11,26 @@ public final class R {
     public static final class attr {
     }
     public static final class id {
-        public static final int btnExportar=0x7f080007;
-        public static final int btnImportar=0x7f080008;
-        public static final int button1=0x7f080006;
-        public static final int deletar=0x7f080004;
-        public static final int editText1=0x7f080003;
+        public static final int btnExportar=0x7f080008;
+        public static final int btnImportar=0x7f080009;
+        public static final int button1=0x7f080007;
+        public static final int deletar=0x7f080005;
+        public static final int editText1=0x7f080004;
         public static final int editTextTag=0x7f080001;
-        public static final int ideia=0x7f080005;
-        public static final int item1=0x7f080009;
-        public static final int item2=0x7f08000a;
-        public static final int item3=0x7f08000b;
-        public static final int item4=0x7f08000c;
-        public static final int item5=0x7f080010;
-        public static final int item6=0x7f080011;
-        public static final int item7=0x7f08000d;
-        public static final int item8=0x7f08000e;
-        public static final int itemChangeTag=0x7f080012;
-        public static final int itemTagRetornar=0x7f080013;
-        public static final int itemVisualizarItensTag=0x7f08000f;
+        public static final int ideia=0x7f080006;
+        public static final int item1=0x7f08000a;
+        public static final int item2=0x7f08000b;
+        public static final int item3=0x7f08000c;
+        public static final int item4=0x7f08000d;
+        public static final int item5=0x7f080011;
+        public static final int item6=0x7f080012;
+        public static final int item7=0x7f08000e;
+        public static final int item8=0x7f08000f;
+        public static final int itemChangeTag=0x7f080013;
+        public static final int itemTagRetornar=0x7f080014;
+        public static final int itemVisualizarItensTag=0x7f080010;
         public static final int linearLayout=0x7f080002;
+        public static final int textView1=0x7f080003;
         public static final int textViewTag=0x7f080000;
     }
     public static final class integer {
