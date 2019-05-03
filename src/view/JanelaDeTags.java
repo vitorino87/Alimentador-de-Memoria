@@ -205,7 +205,7 @@ public class JanelaDeTags {
 	            	   mc.retornarTodosResultados(tabela,"",String.valueOf(tagCarregada));
 	            	   if(mc.initialResult()!=""){
 	            		   Toast.makeText(ac, "Carregada tag "+tagCarregada, Toast.LENGTH_LONG).show();	            		   	            		              		 
-	            		   menu.clear();	           					  
+	            		   //menu.clear();	           					  
 	            		   mmv.chamarMenuInicial(R.menu.menutags);	
 	            	   }else{
 	            		   Toast.makeText(ac, "Não foi possível carregar a tag", Toast.LENGTH_LONG).show();
