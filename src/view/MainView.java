@@ -40,6 +40,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	private static String bkp = "";
 	private JanelaDeTags jt;
 	private static TextView tagView = null;
+	static TextView tagMax;
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
@@ -52,6 +53,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		gestureDetector = new GestureDetector(MainView.this, MainView.this);//instancia o gesture para trabalhar com os gestos na tela
 		ideia = (EditText)findViewById(R.id.editText1);//conecta o editText1 a variável ideia
 		tagView = (TextView) findViewById(R.id.textView1);
+		tagMax = (TextView)findViewById(R.id.tagMax);
 		
 		//método para adicionar a ação de Touch no LinearLayout
 		ll.setOnTouchListener(new OnTouchListener() {			
@@ -77,7 +79,10 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		//faz a busca e carrega os dados do banco num cursor
 		loadIdeias();
 		//move o cursor para o primeiro elemento retornado do banco
-		carregarFirst();				
+		carregarFirst();		
+		
+		tagMax.setText("Tag Max: "+mc.getTagMax());
+		
 	}	
 	
 	/**
@@ -256,7 +261,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			break;
 			
 		case R.id.item8:			
-			jt.onCreateDialog(0).show();		
+			jt.onCreateDialog(0).show();	
 			//mc.addOrChangeTag(TABELA, ideia.getText().toString(), jt.getTag());
 			break;
 			
@@ -271,7 +276,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		case R.id.itemTagRetornar:
 			retornar();
 			break;
-		}
+		}		
 		return super.onOptionsItemSelected(item);
 	}
 	

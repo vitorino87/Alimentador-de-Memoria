@@ -189,6 +189,15 @@ public class Banco extends SQLiteOpenHelper
 		}
 		return a;
 	}
+	
+	public int getTagMax(SQLiteDatabase db){
+		Cursor c = null;
+		int a = -1;		
+		c = db.rawQuery("select max(tag) from memoria", null);
+		if(c.moveToFirst())
+			a = c.getInt(0);
+		return a;
+	}
 		
 	/**
 	 * Retorna os dead files, são os campos que possuem a coluna morto com valor 1
