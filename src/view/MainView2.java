@@ -156,22 +156,22 @@ public class MainView2 extends Activity {
 				String valores = iterator.next();				
 				ArrayList<String> valor = new ArrayList<String>();//variavel para armazenar os valores								
 				int a = 0;//variavel para realizar a contagem da string atual
+				int cont = 1;
 				while(!valores.isEmpty()){ //irá iterar até ser empty					
 					if(valores.charAt(a)==','){
 						String ideia = valores.substring(0, a);	
-			
 						if(ideia.charAt(0)==34 && ideia.charAt(a-1)==34)//checando se há aspas no inicio e fim da ideia
-							ideia = ideia.substring(1, a-1); //removendo as aspas																		
-
+							ideia = ideia.substring(1, a-1); //removendo as aspas
 						if(ideia.contains(","))
 							ideia = ideia.replace(",", "\u0375");																		
-						valor.add(ideia);//inserindo a palavra												
-						valores = valores.substring(++a);//reduz a variavel valores e pula virgula
-						if(valores.length()==1){
+						valor.add(ideia);//inserindo a palavra																																																																		
+						valores = valores.substring(++a);//reduz a variavel valores e pula virgula													
+						a=0;//zerando a contagem
+						cont++;
+						if(cont==3){
 							valor.add(valores);
 							valores="";
-						}							
-						a=0;//zerando a contagem
+						}
 					}
 					a++;						
 				}							

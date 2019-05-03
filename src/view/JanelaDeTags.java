@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,8 @@ public class JanelaDeTags {
 	private int a;
 	MenuDoMainView mmv;
 	static private int tagCarregada;
+	Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,btn0,btnApagar;
+	EditText edt;
 		
 	public int getTag() {
 		return tag;
@@ -59,8 +63,88 @@ public class JanelaDeTags {
 		// Get the layout inflater
 	    LayoutInflater inflater = ac.getLayoutInflater();	  
 	    final View layout = inflater.inflate(R.layout.janela_de_tags, null);
+	    edt = (EditText) layout.findViewById(R.id.editTextTag);
 	    tx = (TextView)layout.findViewById(R.id.textViewTag);
-	    //String msg = "";
+	    btn1 = (Button)layout.findViewById(R.id.button1);
+	    btn2 = (Button)layout.findViewById(R.id.button2);
+	    btn3 = (Button)layout.findViewById(R.id.button3);
+	    btn4 = (Button)layout.findViewById(R.id.button4);
+	    btn5 = (Button)layout.findViewById(R.id.button5);
+	    btn6 = (Button)layout.findViewById(R.id.button6);
+	    btn7 = (Button)layout.findViewById(R.id.button7);
+	    btn8 = (Button)layout.findViewById(R.id.button8);
+	    btn9 = (Button)layout.findViewById(R.id.button9);
+	    btn0 = (Button)layout.findViewById(R.id.button0);
+	    btnApagar = (Button)layout.findViewById(R.id.buttonApagar);
+	    btn1.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				edt.setText(edt.getText()+"1");
+			}
+		});
+	    btn2.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				edt.setText(edt.getText()+"2");
+			}
+		});
+	    btn3.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				edt.setText(edt.getText()+"3");
+			}
+		});
+	    btn4.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				edt.setText(edt.getText()+"4");
+			}
+		});
+	    btn5.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				edt.setText(edt.getText()+"5");
+			}
+		});
+	    btn6.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				edt.setText(edt.getText()+"6");
+			}
+		});
+	    btn7.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				edt.setText(edt.getText()+"7");
+			}
+		});
+	    btn8.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				edt.setText(edt.getText()+"8");
+			}
+		});
+	    btn9.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				edt.setText(edt.getText()+"9");
+			}
+		});
+	    btn0.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				edt.setText(edt.getText()+"0");
+			}
+		});
+	    btnApagar.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				String texto = edt.getText().toString();
+				int tam = texto.length();				
+				if(tam>0)
+					edt.setText(texto.subSequence(0, tam-1));
+			}
+		});
 	    String msg[] = {"Adicionar tag","Alterar para tag","Carregar tag..."};
 	    mmv = new MenuDoMainView(ac, menu);
 	    switch(choose){
@@ -74,7 +158,8 @@ public class JanelaDeTags {
 	               public void onClick(DialogInterface dialog, int id) {            	                     
 	            	   try { 	    
 	            		   a = mc.armazenarPositionDoCursor();
-	            		   int tag = Integer.parseInt(((EditText) layout.findViewById(R.id.editTextTag)).getText().toString());  	            		   
+	            		   //int tag = Integer.parseInt(((EditText) layout.findViewById(R.id.editTextTag)).getText().toString());
+	            		   int tag = Integer.parseInt(edt.getText().toString());
 	            		   mc.addOrChangeTag(tabela, ideia, tag);	  
 	            		   if(choose==0){
 	            			   Toast.makeText(ac, "Adicionado na tag "+tag, Toast.LENGTH_LONG).show();
