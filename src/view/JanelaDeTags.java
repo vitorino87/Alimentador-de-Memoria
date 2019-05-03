@@ -52,6 +52,9 @@ public class JanelaDeTags {
 	 */
 	public Dialog onCreateDialog(final int choose) {
 		
+		if(ideia.contains(","))
+			ideia = ideia.replace(",", "\u0375");
+		
 		AlertDialog.Builder alert = new AlertDialog.Builder(ac);
 		// Get the layout inflater
 	    LayoutInflater inflater = ac.getLayoutInflater();	  
