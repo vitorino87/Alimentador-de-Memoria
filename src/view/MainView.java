@@ -275,6 +275,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			
 		case R.id.itemTagRetornar:
 			retornar();
+			JanelaDeTags.checarMenu = false;
 			break;
 		}		
 		return super.onOptionsItemSelected(item);

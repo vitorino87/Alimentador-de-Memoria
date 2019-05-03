@@ -30,6 +30,7 @@ public class JanelaDeTags {
 	static private int tagCarregada;
 	Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,btn0,btnApagar;
 	EditText edt;
+	static boolean checarMenu=false;
 		
 	public int getTag() {
 		return tag;
@@ -173,6 +174,7 @@ public class JanelaDeTags {
 	            				   mc.goToPositionCursor(a-1);	            				   
 	            			   }else{
 	            				   menu.clear();
+	            				   checarMenu = false;
 	            				   mmv.chamarMenuInicial(R.menu.menu);
 	            				   mc.retornarTodosResultados(tabela, "n", "0");	            				   
 	            				   Toast.makeText(ac, "Retornou porque não há mais tag "+tagCarregada, Toast.LENGTH_LONG).show();
@@ -206,8 +208,11 @@ public class JanelaDeTags {
 	            	   mc.retornarTodosResultados(tabela,"",String.valueOf(tagCarregada));
 	            	   if(mc.initialResult()!=""){
 	            		   Toast.makeText(ac, "Carregada tag "+tagCarregada, Toast.LENGTH_LONG).show();	            		   	            		              		 
-	            		   //menu.clear();	           					  
-	            		   mmv.chamarMenuInicial(R.menu.menutags);	
+	            		   //menu.clear();	          
+	            		   if(!checarMenu){
+	            			   mmv.chamarMenuInicial(R.menu.menutags);
+	            			   checarMenu = true;
+	            		   }
 	            	   }else{
 	            		   Toast.makeText(ac, "Não foi possível carregar a tag", Toast.LENGTH_LONG).show();
 	            		   mc.retornarTodosResultados(tabela, "n", "0");
