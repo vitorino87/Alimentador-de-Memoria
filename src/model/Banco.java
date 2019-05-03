@@ -137,12 +137,12 @@ public class Banco extends SQLiteOpenHelper
 		Cursor c = null;
 		if(morto.equals("t"))
 			c = db.query(tabela, null, null, null, null, null, null);
-		else if(!tag.equals("0")){	
-			String[] args = {tag};
-			c = db.query(tabela, null, "tag=?", args, null, null, null);
-		}else{
+		else if(morto=="n" || morto=="s"){	
 			String[] args = {morto};
-			c = db.query(tabela, null, "morto=?", args, null, null, null);					
+			c = db.query(tabela, null, "morto=?", args, null, null, null);			
+		}else{
+			String[] args = {tag};
+			c = db.query(tabela, null, "tag=?", args, null, null, null);					
 		}
 		return c;
 	}
