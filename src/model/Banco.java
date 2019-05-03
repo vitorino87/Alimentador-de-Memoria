@@ -189,6 +189,7 @@ public class Banco extends SQLiteOpenHelper
 		}
 		return a;
 	}
+		
 	/**
 	 * Retorna os dead files, são os campos que possuem a coluna morto com valor 1
 	 * @param db
