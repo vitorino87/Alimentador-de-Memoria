@@ -100,7 +100,11 @@ public class ControladorDoDB {
 	
 	public int getTagAtual(){
 		int b=-1;
-		b = cursor.getInt(3);
+		try{
+			b = cursor.getInt(3);
+		}catch(Exception e){
+			b=-1;
+		}						
 		return b;
 	}
 	
