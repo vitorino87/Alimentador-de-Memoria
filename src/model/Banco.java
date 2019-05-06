@@ -11,7 +11,7 @@ public class Banco extends SQLiteOpenHelper
 	//Controle da versão
 	private static final int VERSAO_BANCO = 3;
 	//Cria a tabela com _id sequencial
-	private static final String SCRIPT_TABLE_CREATE= "create table memoria(id integer primary key autoincrement, ideia text, morto text, tag integer);";	
+	private static final String SCRIPT_TABLE_CREATE= "create table memoria(id integer primary key autoincrement, ideia text, morto text, tag integer);";
 	
 	public Banco(Context context, String nomeBanco) {//criando o banco
 		super(context, nomeBanco, null, VERSAO_BANCO);
@@ -101,8 +101,7 @@ public class Banco extends SQLiteOpenHelper
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
-		
+	
 	}
 	
 	/**
@@ -154,20 +153,48 @@ public class Banco extends SQLiteOpenHelper
 	 * @param info - opcional, informe a informação a ser buscada. Funciona somente para operação 2 e 3;
 	 * @return um cursor com o resultado obtido
 	 */
-	public Cursor retornarTodosResultados(SQLiteDatabase db, String tabela, int operacao, String info){
+//	public Cursor retornarTodosResultados(SQLiteDatabase db, String tabela, int operacao, String info){
+//		Cursor c = null;
+//		String[] args = {info};
+//		switch(operacao){
+//		case 1:
+//			c = db.query(tabela, null, null, null, null, null, null);
+//			break;
+//		case 2:			
+//			c = db.query(tabela, null, "tag=?", args, null, null, null);
+//			break;
+//		case 3:			
+//			c = db.query(tabela, null, "morto=?", args, null, null, null);
+//			break;
+//		}				
+//		return c;
+//	}
+	
+	public Cursor retornarTodosResultados(SQLiteDatabase db, String tabela, int operacao, String[] info){
 		Cursor c = null;
-		String[] args = {info};
-		switch(operacao){
-		case 1:
-			c = db.query(tabela, null, null, null, null, null, null);
-			break;
-		case 2:			
-			c = db.query(tabela, null, "tag=?", args, null, null, null);
-			break;
-		case 3:			
-			c = db.query(tabela, null, "morto=?", args, null, null, null);
-			break;
-		}				
+		String[] args = info;
+		try{
+			switch(operacao){
+			case 1:
+				c = db.query(tabela, null, null, null, null, null, null);//utilizado pelo export
+				break;
+			case 2:			//utilizado pela funcionalidade Tag
+				c = db.query(tabela, null, "tag=? AND id BETWEEN ? AND ? LIMIT 350", args, null, null, null);
+				break;
+			case 3:			//utilizado pela funcionalidade DeadFiles
+				c = db.query(tabela, null, "morto=? AND id BETWEEN ? AND ? LIMIT 350", args, null, null, null);
+				break;
+			case 4:
+				c = db.query(tabela, null, "morto=? LIMIT 350", args, null, null, null);
+				break;
+			case 5:
+				c = db.query(tabela, null, "morto=?", args, null, null, null);
+				break;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+						
 		return c;
 	}
 	
@@ -198,6 +225,38 @@ public class Banco extends SQLiteOpenHelper
 			a = c.getInt(0);
 		return a;
 	}
+	
+	public int getMaxId(SQLiteDatabase db){
+		Cursor c = null;
+		int a = -1;
+		c = db.rawQuery("select max(id) from memoria", null);
+		if(c.moveToFirst())
+			a = c.getInt(0);
+		return a;
+	}
+	
+	public int getMinId(SQLiteDatabase db){
+		Cursor c = null;
+		int a = -1;
+		c = db.rawQuery("select min(id) from memoria", null);
+		if(c.moveToFirst())
+			a = c.getInt(0);
+		return a;
+	}
+	
+	final String[] query = {"select max(tag) from memoria",
+			"select max(id) from memoria",
+			"select min(id) from memoria"};
+	
+	public int getInfoDB(SQLiteDatabase db, int index){
+		Cursor c = null;
+		int a = -1;
+		c = db.rawQuery(query[index], null);
+		if(c.moveToFirst())
+			a = c.getInt(0);
+		return a;
+	}
+	
 		
 	/**
 	 * Retorna os dead files, são os campos que possuem a coluna morto com valor 1

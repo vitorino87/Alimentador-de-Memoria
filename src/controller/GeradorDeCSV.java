@@ -11,7 +11,8 @@ public class GeradorDeCSV {
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public String getCSV(ControladorDoDB mc, String TABELA){
 		mc.abrirConexao();
-		mc.retornarTodosResultados(TABELA, "t", "");
+		mc.setTipoDeQuery(1);
+		mc.retornarTodosResultados(TABELA);
 		Cursor cursor = mc.getCursor();		
 		String csv="";
 		int qtdeColunas = cursor.getColumnCount();

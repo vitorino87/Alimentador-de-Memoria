@@ -16,7 +16,7 @@ public abstract class TelaAux extends MainView{
 	 * Método executado ao mover o dedo na tela da direita para esquerda
 	 */
 	public static void moverDireitaParaEsquerda() {
-		// TODO Auto-generated method stub
+		
 		//System.out.println("Fui para esquerda");
 		carregarIdeia();
 		mudarACor();
@@ -26,7 +26,7 @@ public abstract class TelaAux extends MainView{
 	 * Método executado ao mover o dedo na tela da esquerda para direita
 	 */
 	public static void moverEsquerdaParaDireita() {
-		// TODO Auto-generated method stub
+	
 		//System.out.println("Fui para direita");
 		carregarIdeiaAnterior();
 		mudarACor();
