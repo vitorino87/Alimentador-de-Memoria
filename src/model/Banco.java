@@ -188,7 +188,12 @@ public class Banco extends SQLiteOpenHelper
 				c = db.query(tabela, null, "morto=? LIMIT 5", args, null, null, null);
 				break;
 			case 5:
-				c = db.query(tabela, null, "morto=?", args, null, null, null);
+				//c = db.query(tabela, null, "morto=? AND id BETWEEN ? AND ? ORDER BY id DESC LIMIT 5", args, null, null, null);
+				c = db.rawQuery("SELECT * FROM (SELECT * FROM memoria WHERE morto =? AND id BETWEEN ? AND ? ORDER BY id DESC LIMIT 5) ORDER BY id ASC", args);
+				break;
+			case 6:
+				//c = db.query(tabela, null, "tag=? AND id BETWEEN ? AND ? ORDER BY id DESC LIMIT 5", args, null, null, null);
+				c = db.rawQuery("SELECT * FROM (SELECT * FROM memoria WHERE tag=? AND id BETWEEN ? AND ? ORDER BY id DESC LIMIT 5) ORDER BY id ASC", args);
 				break;
 			}
 		}catch(Exception e){

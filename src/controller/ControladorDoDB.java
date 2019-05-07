@@ -184,6 +184,14 @@ public class ControladorDoDB {
 				String[] info3 = {morto};
 				cursor = banco.retornarTodosResultados(db, tabela, 4 , info3);
 				break;
+			case 5:
+				String[] info4 = {morto, String.valueOf(minId), String.valueOf(maxId)};
+				cursor = banco.retornarTodosResultados(db, tabela, 5, info4);
+				break;
+			case 6:
+				String[] info5 = {String.valueOf(tag), String.valueOf(minId), String.valueOf(maxId)};
+				cursor = banco.retornarTodosResultados(db, tabela, 6, info5);
+				break;
 			}										
 		}catch(Exception e){
 			
@@ -277,38 +285,43 @@ public class ControladorDoDB {
 	
 	public String previousResult(){
 		String b="";
+		int current = getCurrentId();
 		if(!cursor.isFirst()){
 			cursor.moveToPrevious();					
 		}else if(banco.getMinId(db)<getCurrentId()){  //verifica se o id min. do DB é menor que o id atual
-			minId = getCurrentId() - 5;
-			if(minId<0) minId = 0;
-			maxId = getCurrentId()-1;
-			retornarTodosResultados("memoria");
-			if(cursor.getCount()<=0){
-				boolean a = true;				
-				while(a){
-					if(maxId<=5)
-						maxId = banco.getMaxId(db)+1;
-					else
-						maxId = minId;	
-					minId = maxId - 5;
-					if(minId<0) minId = 0;					
-//					if(maxId<=0){
-//						break;
-//					}
-					retornarTodosResultados("memoria");
-					if(cursor.getCount()>0)
-						a = false;
-					
-				}				
+			minId = 0;			
+			maxId = getCurrentId()-1;				
+			if(getTipoDeQuery()==2){
+				setTipoDeQuery(6);
+			}else if(getTipoDeQuery()==3){
+				setTipoDeQuery(5);
 			}
+			retornarTodosResultados("memoria");
+			if(cursor.getCount()<=0){								
+				maxId = banco.getMaxId(db)+1;
+				//minId = maxId - 5;
+				minId = current;
+				//if(minId<0) minId = 0;
+				retornarTodosResultados("memoria");								
+			}			
 			cursor.moveToLast();
-		}else{ 			
+		}else{ 		
+			if(getTipoDeQuery()==2){
+				setTipoDeQuery(6);
+			}else if(getTipoDeQuery()==3){
+				setTipoDeQuery(5);
+			}
 			maxId = banco.getMaxId(db)+1;
-			minId = maxId - 5;
-			if(minId<0) minId = 0;
+			//minId = maxId - 5;
+			minId = current;
+			//if(minId<0) minId = 0;
 			retornarTodosResultados("memoria");
 			cursor.moveToLast();				
+		}
+		if(getTipoDeQuery()==6){
+			setTipoDeQuery(2);
+		}else if(getTipoDeQuery()==5){
+			setTipoDeQuery(3);
 		}
 		b = cursor.getString(1);		
 		return b;

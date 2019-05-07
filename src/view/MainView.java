@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
@@ -22,6 +23,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 import controller.ControladorDoDB;
@@ -34,7 +36,8 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	static EditText ideia = null;
 	final String TABELA="memoria";
 	ViewGroup gi = null;
-	Menu menu = null;	
+	Menu menu = null;
+	Menu menu2 = null;	
 	static boolean allcaps = false;
 	static boolean isColored = true;
 	private static String bkp = "";
@@ -44,6 +47,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	int minId = 0;
 	int maxId = 0;
 	int currentId =0;
+	PopupMenu popupMenu;
 	
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -58,7 +62,8 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		ideia = (EditText)findViewById(R.id.editText1);//conecta o editText1 a variável ideia
 		tagView = (TextView) findViewById(R.id.textView1);
 		tagMax = (TextView)findViewById(R.id.tagMax);
-		
+		//popupMenu = new PopupMenu(context,null);
+		//menu2 = popupMenu.getMenu();
 		
 		//método para adicionar a ação de Touch no LinearLayout
 		ll.setOnTouchListener(new OnTouchListener() {			
@@ -343,27 +348,11 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			mc.setMinId(gd.restaurarEstado("minId", this));
 			mc.setTipoDeQuery(gd.restaurarEstado("tipoSql", this));	
 			mc.setTag(gd.restaurarEstado("tag", this));
-			mc.setMorto(gd.restaurarEstado2("morto", this));
-//			if(mc.checarPosition()){ //método para checar a posição do Cursor
-//				//método que faz select e atualiza o Cursor
-//				mc.atualizarCursor(TABELA);				
-//			}							
+			mc.setMorto(gd.restaurarEstado2("morto", this));						
 			if(mc.getTipoDeQuery()==2 && mc.getMaxId()!=-1 && mc.getMinId()!=-1 || mc.getTipoDeQuery()==3
-					&& mc.getMaxId()!=-1 && mc.getMinId()!=-1){									
+					&& mc.getMaxId()!=-1 && mc.getMinId()!=-1){	
 				mc.retornarTodosResultados("memoria");
-				if(mc.getTipoDeQuery()==2){
-					if(!JanelaDeTags.checarMenu){
-						MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);
-						mmv.chamarMenuInicial(R.menu.menutags);
-						menu.removeItem(R.id.item8);
-						JanelaDeTags.checarMenu = true;
-         		   }
-				}else if(mc.getTipoDeQuery()==3 && mc.getMorto().equals("s")){
-					Toast.makeText(context, "Dead Files", Toast.LENGTH_LONG).show();				
-					menu.clear();
-					MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
-				    mmv.chamarMenuInicial(R.menu.menu2);
-				}
+				mc.nextResult();
 				if(a==-1){
 					mc.getCursor().moveToFirst();
 					mc.initialResult();
@@ -374,12 +363,12 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 				loadIdeias();
 				carregarFirst();
 			}
-		}catch(Exception ex){}		
+		}catch(Exception ex){
+			loadIdeias();
+			carregarFirst();
+		}		
 	}
 	
-	/**
-	 * Método iniciar
-	 */
 	@Override
 	protected void onStart(){
 		super.onStart();
@@ -399,8 +388,36 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	public boolean onCreateOptionsMenu(Menu menu) {	    	    
 	    MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	
 	    this.menu = menu;
-	    return mmv.chamarMenuInicial(R.menu.menu);	    
+	    boolean b = true;
+	    try{	    	
+	    	switch(mc.getTipoDeQuery()){
+	    	case 2:
+	    		if(mc.getTipoDeQuery()==2 && mc.getMaxId()!=-1 && mc.getMinId()!=-1){
+	    			mmv = new MenuDoMainView(MainView.this, menu);
+	    			mmv.chamarMenuInicial(R.menu.menu);
+	    			mmv.chamarMenuInicial(R.menu.menutags);
+	    			menu.removeItem(R.id.item8);
+	    			JanelaDeTags.checarMenu = true;
+	    		}else{
+	    			mmv.chamarMenuInicial(R.menu.menu);
+	    		}
+	    		break;
+	    	case 3:
+	    		if(mc.getTipoDeQuery()==3 && mc.getMorto().equals("s") && mc.getMaxId()!=-1 && mc.getMinId()!=-1){
+	    			menu.clear();
+	    			mmv = new MenuDoMainView(MainView.this, menu);	   
+	    			mmv.chamarMenuInicial(R.menu.menu2);
+	    		}else{
+	    			mmv.chamarMenuInicial(R.menu.menu);
+	    		}
+	    		break;	    		    		
+	    	default:
+	    		mmv.chamarMenuInicial(R.menu.menu);
+	    		break;
+	    	}
+		}catch(Exception e){
+				
+		}
+	    return b;
 	}
-	
-	
 }
