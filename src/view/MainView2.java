@@ -52,7 +52,7 @@ public class MainView2 extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				ImportadorPreliminar it = new ImportadorPreliminar(MainView2.this);		
 				exportarOuImportar = it.abrirArquivo();
 			}
@@ -62,7 +62,7 @@ public class MainView2 extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				ExportadorTemplate et = new ExportadorTemplate(MainView2.this); //instanciando o Exportador
 				exportarOuImportar = et.salvarComo();  //salvando o arquivo onde será exportado a informação desejada
 			}
@@ -93,7 +93,7 @@ public class MainView2 extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				mc = new ControladorDoDB(context);// instancia um MainControl com o contexto atual
 				mc.abrirConexao();// abre a conexão com o banco
 				String ideia = txtIdeia.getText().toString();// adiciona o texto adicionado pelo usuário na variável ideia

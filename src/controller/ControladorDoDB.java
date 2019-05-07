@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 import model.Banco;
 
 public class ControladorDoDB {
@@ -14,35 +13,79 @@ public class ControladorDoDB {
 	Cursor cursor;
 	Boolean previous=false;
 	int position=-1;	
+	int tipoDeQuery = 0;	
+	String morto;
+	int minId, maxId;
+	int tag;
 	
+	public int getTag() {
+		return tag;
+	}
+
+	public void setTag(int tag) {
+		this.tag = tag;
+	}
+
+	public void setMinId(int minId) {
+		this.minId = minId;
+	}
+	
+	public int getMaxId() {
+		return maxId;
+	}
+
+	public int getMinId(){
+		return minId;
+	}
+
+	public void setMaxId(int maxId) {
+		this.maxId = maxId;
+	}
+
+	public String getMorto() {
+		return morto;
+	}
+
+	public void setMorto(String morto) {
+		this.morto = morto;
+	}
+
+	public int getTipoDeQuery() {
+		return tipoDeQuery;
+	}
+
+	public void setTipoDeQuery(int tipoDeQuery) {
+		this.tipoDeQuery = tipoDeQuery;
+	}
+
 	public int armazenarPositionDoCursor(){
 		position = cursor.getPosition();
 		return position;
 	}
 
-	public void goToPositionCursor() {
-		cursor.moveToPosition(position);		
-	}
+//	public void goToPositionCursor() {
+//		cursor.moveToPosition(position);		
+//	}
 	
 	public void goToPositionCursor(int posicao){
 		cursor.moveToPosition(posicao);
 	}
 	
-	public void atualizarCursorAposInserirIdeia(String tabela){
-		if(position!=-1){
-			retornarTodosResultados(tabela,"n","0");
-			goToPositionCursor();
-			position=-1;
-		}
-	}
+//	public void atualizarCursor(String tabela){		
+//		if(position!=-1){
+//			retornarTodosResultados(tabela);
+//			goToPositionCursor();
+//			position=-1;
+//		}
+//	}
 	
-	public boolean checarPosition(){
-		if(position!=-1){
-			return true;
-		}{
-			return false;
-		}
-	}
+//	public boolean checarPosition(){
+//		if(position!=-1){
+//			return true;
+//		}{
+//			return false;
+//		}
+//	}
 
 	public ControladorDoDB(Context context){
 		banco = new Banco(context, "Ideias");
@@ -53,6 +96,10 @@ public class ControladorDoDB {
 		cursor = banco.buscarIdMax(db);
 		int a = cursor.getInt(0);
 		return a;
+	}
+	
+	public int getIdMaxDB(){
+		return banco.getMaxId(db);
 	}
 
 	//Retorna o primeiro cursor
@@ -73,8 +120,13 @@ public class ControladorDoDB {
 	}
 
 	// conectar no banco
-	public void abrirConexao() {		
+	public void abrirConexao() {	
+		try{
 		db = banco.getWritableDatabase();
+		}catch(Exception e){
+			e.printStackTrace();
+			db=null;
+		}
 	}
 	
 	/**
@@ -84,10 +136,58 @@ public class ControladorDoDB {
 	 * @param dead - escolha "s" para sim, "n" para não, "t" para tudo e "" para ignorar
 	 * @param tag - informe a tag, escolha "0" para padrão, "" para ignorar ou algum número de tag salva
 	 */
-	public void retornarTodosResultados(String tabela, String dead, String tag){
+//	public void retornarTodosResultados(String tabela, String dead, String tag){
+//		abrirConexao();		
+//		cursor = banco.retornarTodosResultados(db, tabela, dead, tag);				
+//		//cursor = banco.retornarTodosResultados(db, tabela, 1, "n");
+//	}
+	
+	public int getCurrentIdMin(){
+		int pos = cursor.getPosition();
+		cursor.moveToFirst();
+		int minId = cursor.getInt(0);
+		cursor.moveToPosition(pos);
+		return minId;
+	}
+	
+	public int getCurrentIdMax(){			
+		int pos = cursor.getPosition();
+		cursor.moveToLast();
+		int maxId = cursor.getInt(0);
+		cursor.moveToPosition(pos);
+		return maxId;
+	}
+	
+	public int currentId(){
+		return cursor.getInt(0);		
+	}
+			
+	public void retornarTodosResultados(String tabela){
 		abrirConexao();
-		cursor = banco.retornarTodosResultados(db, tabela, dead, tag);
-		//cursor = banco.retornarTodosResultados(db, tabela, 1, "n");
+		//boolean checar = true;
+		//int max = getCurrentIdMax();
+		try{
+		//while(checar && banco.getMaxId(db)>=maxId){
+			switch(tipoDeQuery){
+			case 1:
+				cursor = banco.retornarTodosResultados(db, tabela,1, null);
+				break;
+			case 2:
+				String[] info = {String.valueOf(tag), String.valueOf(minId), String.valueOf(maxId)};
+				cursor = banco.retornarTodosResultados(db, tabela, 2, info);				
+				break;
+			case 3:
+				String[] info2 = {morto, String.valueOf(minId), String.valueOf(maxId)};
+				cursor = banco.retornarTodosResultados(db, tabela, 3, info2);
+				break;
+			case 4:
+				String[] info3 = {morto};
+				cursor = banco.retornarTodosResultados(db, tabela, 4 , info3);
+				break;
+			}										
+		}catch(Exception e){
+			
+		}
 	}
 	
 	public String initialResult(){
@@ -107,17 +207,44 @@ public class ControladorDoDB {
 		}						
 		return b;
 	}
+		
 	
 	public int getTagMax(){
 		return banco.getTagMax(db);
 	}
 	
+	public int getCurrentId(){
+		int b=-1;
+		try{
+			b = cursor.getInt(0);
+		}catch(Exception e){
+			b=-1;
+		}						
+		return b;
+	}
+	
 	public String nextResult(){
-		String b="";			
+		String b="";				
 		if(!cursor.isLast())
 			cursor.moveToNext();
-		else
-			cursor.moveToPosition(0);
+		else if(getCurrentId()<banco.getMaxId(db)+1){
+			minId = getCurrentIdMax()+1;
+			maxId = banco.getMaxId(db)+1;                //(fixado)
+			retornarTodosResultados("memoria");
+			if(cursor.getCount()<=0){
+				minId = 0;
+				maxId = banco.getMaxId(db)+1;
+				retornarTodosResultados("memoria");
+			}
+			cursor.moveToFirst();
+		}else{
+			minId = 0;
+			maxId = banco.getMaxId(db)+1;
+			retornarTodosResultados("memoria");
+			cursor.moveToFirst();
+			//cursor.moveToPosition(0);
+		}
+					
 		b = cursor.getString(1);			
 		return b;
 	}
@@ -129,15 +256,61 @@ public class ControladorDoDB {
 		return b;
 	}
 	
+	public String currentResultId(int id){		
+		String b="";
+		cursor.moveToFirst();
+		try{
+			if(cursor.getCount()>0){
+				while(cursor.getInt(0)!=id){
+					cursor.moveToNext();
+					if(cursor.isLast())
+						break;
+				}
+			}
+		}catch(Exception ex){
+			
+		}				
+		//cursor.moveToPosition(position);			
+		b = cursor.getString(1);								
+		return b;
+	}
+	
 	public String previousResult(){
 		String b="";
 		if(!cursor.isFirst()){
-			cursor.moveToPrevious();		
-			b = cursor.getString(1);
-		}else{
+			cursor.moveToPrevious();					
+		}else if(banco.getMinId(db)<getCurrentId()){  //verifica se o id min. do DB é menor que o id atual
+			minId = getCurrentId() - 5;
+			if(minId<0) minId = 0;
+			maxId = getCurrentId()-1;
+			retornarTodosResultados("memoria");
+			if(cursor.getCount()<=0){
+				boolean a = true;				
+				while(a){
+					if(maxId<=5)
+						maxId = banco.getMaxId(db)+1;
+					else
+						maxId = minId;	
+					minId = maxId - 5;
+					if(minId<0) minId = 0;					
+//					if(maxId<=0){
+//						break;
+//					}
+					retornarTodosResultados("memoria");
+					if(cursor.getCount()>0)
+						a = false;
+					
+				}				
+			}
 			cursor.moveToLast();
-			b = cursor.getString(1);	
+		}else{ 			
+			maxId = banco.getMaxId(db)+1;
+			minId = maxId - 5;
+			if(minId<0) minId = 0;
+			retornarTodosResultados("memoria");
+			cursor.moveToLast();				
 		}
+		b = cursor.getString(1);		
 		return b;
 	}
 	
