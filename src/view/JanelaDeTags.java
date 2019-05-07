@@ -220,6 +220,7 @@ public class JanelaDeTags {
 	            		   //menu.clear();	          
 	            		   if(!checarMenu){
 	            			   mmv.chamarMenuInicial(R.menu.menutags);
+	            			   menu.removeItem(R.id.item8);
 	            			   checarMenu = true;
 	            		   }
 	            	   }else{

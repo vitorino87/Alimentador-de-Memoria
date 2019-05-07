@@ -355,6 +355,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 					if(!JanelaDeTags.checarMenu){
 						MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);
 						mmv.chamarMenuInicial(R.menu.menutags);
+						menu.removeItem(R.id.item8);
 						JanelaDeTags.checarMenu = true;
          		   }
 				}else if(mc.getTipoDeQuery()==3 && mc.getMorto().equals("s")){
