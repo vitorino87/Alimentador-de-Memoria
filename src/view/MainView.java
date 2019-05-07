@@ -146,6 +146,8 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		try {
 			a = new String(b.getBytes("UTF8"), StandardCharsets.UTF_8);
 			a = a.replace("\u0375", ",");
+			controller.FormatadorDeTexto ft = new controller.FormatadorDeTexto();
+			a = ft.formatOutputText(a);
 		} catch (UnsupportedEncodingException e) {e.printStackTrace();}	
 		
 		if(allcaps)
@@ -211,7 +213,8 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 				menu.clear();
 				MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
 			    mmv.chamarMenuInicial(R.menu.menu2);
-			    carregarIdeia();
+			    carregarFirst();
+			    //carregarIdeia();
 			}else{
 				Toast.makeText(context, "Não há Dead Files", Toast.LENGTH_LONG).show();					
 			}
@@ -348,14 +351,24 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			if(mc.getTipoDeQuery()==2 && mc.getMaxId()!=-1 && mc.getMinId()!=-1 || mc.getTipoDeQuery()==3
 					&& mc.getMaxId()!=-1 && mc.getMinId()!=-1){									
 				mc.retornarTodosResultados("memoria");
+				if(mc.getTipoDeQuery()==2){
+					if(!JanelaDeTags.checarMenu){
+						MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);
+						mmv.chamarMenuInicial(R.menu.menutags);
+						JanelaDeTags.checarMenu = true;
+         		   }
+				}else if(mc.getTipoDeQuery()==3 && mc.getMorto().equals("s")){
+					Toast.makeText(context, "Dead Files", Toast.LENGTH_LONG).show();				
+					menu.clear();
+					MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
+				    mmv.chamarMenuInicial(R.menu.menu2);
+				}
 				if(a==-1){
 					mc.getCursor().moveToFirst();
 					mc.initialResult();
 				}else{
 					carregarIdeia(a);
 				}									
-			}else if(a!=-1){
-				carregarIdeia(a);
 			}else{
 				loadIdeias();
 				carregarFirst();

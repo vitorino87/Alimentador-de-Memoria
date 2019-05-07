@@ -30,7 +30,7 @@ public class JanelaDeTags {
 	static int tagCarregada = 0;
 	Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,btn0,btnApagar;
 	EditText edt;
-	static boolean checarMenu=false;
+	static boolean checarMenu=false;             //serve para evitar que seja adicionado vários menus ao menu principal
 		
 	public int getTag() {
 		return tag;
