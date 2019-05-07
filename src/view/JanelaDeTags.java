@@ -229,7 +229,7 @@ public class JanelaDeTags {
 	            		   mc.retornarTodosResultados(tabela);
 	            		   mc.goToPositionCursor(a-1);			//utilizando a posição atual do cursor
 	            	   }
-	            	   MainView.carregarIdeia(); 
+	            	   MainView.carregarFirst(); 
 	               }
 	           })
 	           .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {

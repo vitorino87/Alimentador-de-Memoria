@@ -346,8 +346,14 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 //				mc.atualizarCursor(TABELA);				
 //			}							
 			if(mc.getTipoDeQuery()==2 && mc.getMaxId()!=-1 && mc.getMinId()!=-1 || mc.getTipoDeQuery()==3
-					&& mc.getMaxId()!=-1 && mc.getMinId()!=-1){
+					&& mc.getMaxId()!=-1 && mc.getMinId()!=-1){									
 				mc.retornarTodosResultados("memoria");
+				if(a==-1){
+					mc.getCursor().moveToFirst();
+					mc.initialResult();
+				}else{
+					carregarIdeia(a);
+				}									
 			}else if(a!=-1){
 				carregarIdeia(a);
 			}else{

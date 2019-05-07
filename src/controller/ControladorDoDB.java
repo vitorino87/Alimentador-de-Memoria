@@ -227,16 +227,22 @@ public class ControladorDoDB {
 		String b="";				
 		if(!cursor.isLast())
 			cursor.moveToNext();
-		else if(getCurrentId()<banco.getMaxId(db)){
+		else if(getCurrentId()<banco.getMaxId(db)+1){
 			minId = getCurrentIdMax()+1;
-			maxId = banco.getMaxId(db);
+			maxId = banco.getMaxId(db)+1;                //(fixado)
 			retornarTodosResultados("memoria");
+			if(cursor.getCount()<=0){
+				minId = 0;
+				maxId = banco.getMaxId(db)+1;
+				retornarTodosResultados("memoria");
+			}
 			cursor.moveToFirst();
 		}else{
 			minId = 0;
-			maxId = banco.getMaxId(db);
+			maxId = banco.getMaxId(db)+1;
 			retornarTodosResultados("memoria");
-			cursor.moveToPosition(0);
+			cursor.moveToFirst();
+			//cursor.moveToPosition(0);
 		}
 					
 		b = cursor.getString(1);			
@@ -273,20 +279,38 @@ public class ControladorDoDB {
 		String b="";
 		if(!cursor.isFirst()){
 			cursor.moveToPrevious();					
-		}else if(banco.getMinId(db)<getCurrentId()){
-			minId = getCurrentId() - 351;
+		}else if(banco.getMinId(db)<getCurrentId()){  //verifica se o id min. do DB é menor que o id atual
+			minId = getCurrentId() - 5;
 			if(minId<0) minId = 0;
-			maxId = getCurrentId();
+			maxId = getCurrentId()-1;
 			retornarTodosResultados("memoria");
+			if(cursor.getCount()<=0){
+				boolean a = true;				
+				while(a){
+					if(maxId<=5)
+						maxId = banco.getMaxId(db)+1;
+					else
+						maxId = minId;	
+					minId = maxId - 5;
+					if(minId<0) minId = 0;					
+//					if(maxId<=0){
+//						break;
+//					}
+					retornarTodosResultados("memoria");
+					if(cursor.getCount()>0)
+						a = false;
+					
+				}				
+			}
 			cursor.moveToLast();
 		}else{ 			
-			maxId = banco.getMaxId(db);
-			minId = maxId - 350;
+			maxId = banco.getMaxId(db)+1;
+			minId = maxId - 5;
 			if(minId<0) minId = 0;
 			retornarTodosResultados("memoria");
 			cursor.moveToLast();				
 		}
-		b = cursor.getString(1);
+		b = cursor.getString(1);		
 		return b;
 	}
 	

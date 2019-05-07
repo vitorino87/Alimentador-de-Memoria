@@ -179,13 +179,13 @@ public class Banco extends SQLiteOpenHelper
 				c = db.query(tabela, null, null, null, null, null, null);//utilizado pelo export
 				break;
 			case 2:			//utilizado pela funcionalidade Tag
-				c = db.query(tabela, null, "tag=? AND id BETWEEN ? AND ? LIMIT 350", args, null, null, null);
+				c = db.query(tabela, null, "tag=? AND id BETWEEN ? AND ? LIMIT 5", args, null, null, null);
 				break;
 			case 3:			//utilizado pela funcionalidade DeadFiles
-				c = db.query(tabela, null, "morto=? AND id BETWEEN ? AND ? LIMIT 350", args, null, null, null);
+				c = db.query(tabela, null, "morto=? AND id BETWEEN ? AND ? LIMIT 5", args, null, null, null);
 				break;
 			case 4:
-				c = db.query(tabela, null, "morto=? LIMIT 350", args, null, null, null);
+				c = db.query(tabela, null, "morto=? LIMIT 5", args, null, null, null);
 				break;
 			case 5:
 				c = db.query(tabela, null, "morto=?", args, null, null, null);
