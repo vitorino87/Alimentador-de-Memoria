@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 import model.Banco;
 
 public class ControladorDoDB {
@@ -30,6 +29,14 @@ public class ControladorDoDB {
 	public void setMinId(int minId) {
 		this.minId = minId;
 	}
+	
+	public int getMaxId() {
+		return maxId;
+	}
+
+	public int getMinId(){
+		return minId;
+	}
 
 	public void setMaxId(int maxId) {
 		this.maxId = maxId;
@@ -48,10 +55,7 @@ public class ControladorDoDB {
 	}
 
 	public void setTipoDeQuery(int tipoDeQuery) {
-		if(tipoDeQuery==-1)
-			this.tipoDeQuery = 3;
-		else
-			this.tipoDeQuery = tipoDeQuery;
+		this.tipoDeQuery = tipoDeQuery;
 	}
 
 	public int armazenarPositionDoCursor(){
@@ -116,8 +120,13 @@ public class ControladorDoDB {
 	}
 
 	// conectar no banco
-	public void abrirConexao() {		
+	public void abrirConexao() {	
+		try{
 		db = banco.getWritableDatabase();
+		}catch(Exception e){
+			e.printStackTrace();
+			db=null;
+		}
 	}
 	
 	/**
@@ -155,13 +164,13 @@ public class ControladorDoDB {
 			
 	public void retornarTodosResultados(String tabela){
 		abrirConexao();
-		boolean checar = true;
+		//boolean checar = true;
 		//int max = getCurrentIdMax();
-		while(checar && banco.getMaxId(db)>=maxId){
+		try{
+		//while(checar && banco.getMaxId(db)>=maxId){
 			switch(tipoDeQuery){
 			case 1:
 				cursor = banco.retornarTodosResultados(db, tabela,1, null);
-				//checar = false;
 				break;
 			case 2:
 				String[] info = {String.valueOf(tag), String.valueOf(minId), String.valueOf(maxId)};
@@ -175,12 +184,10 @@ public class ControladorDoDB {
 				String[] info3 = {morto};
 				cursor = banco.retornarTodosResultados(db, tabela, 4 , info3);
 				break;
-			}
-			checar = !cursor.moveToFirst();
-			if(checar){ //se checar é true é porque ele não encontrou nada
-				//minId += max; //cada vez que checar for true, será somad
-			}
-		}					
+			}										
+		}catch(Exception e){
+			
+		}
 	}
 	
 	public String initialResult(){
@@ -247,8 +254,13 @@ public class ControladorDoDB {
 		String b="";
 		cursor.moveToFirst();
 		try{
-			while(cursor.getInt(0)!=id)
-				cursor.moveToNext();
+			if(cursor.getCount()>0){
+				while(cursor.getInt(0)!=id){
+					cursor.moveToNext();
+					if(cursor.isLast())
+						break;
+				}
+			}
 		}catch(Exception ex){
 			
 		}				

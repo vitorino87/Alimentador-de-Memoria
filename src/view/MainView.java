@@ -73,26 +73,29 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		//método para adicionar a ação de Touch no EditText
 		ideia.setOnTouchListener(new OnTouchListener() {			
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				
+			public boolean onTouch(View v, MotionEvent event) {				
 				gestureDetector.onTouchEvent(event);
 				ideia.onTouchEvent(event);
 				return true;
 			}
 		});				
 		loadIdeias();//faz a busca e carrega os dados do banco num cursor		
-		carregarFirst();//move o cursor para o primeiro elemento retornado do banco				
-		tagMax.setText("Tag Max: "+mc.getTagMax());		
+		carregarFirst();//move o cursor para o primeiro elemento retornado do banco							
 	}	
 	
 	/**
 	 * Método inicial para carregar os resultados da tabela memoria do banco sem dead files
 	 */
 	public static void loadIdeias(){
-		mc.setMorto("n");
-		mc.setTipoDeQuery(4);
-		mc.retornarTodosResultados("memoria");
+		try{
+			mc.setMorto("n");
+			mc.setTipoDeQuery(4);
+			mc.retornarTodosResultados("memoria");
+			mc.setTipoDeQuery(3);
+		}catch(Exception e){
+			
 		}
+	}
 	
 	/**
 	 * Método para carregar a ideia no EditText
@@ -113,8 +116,6 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		try{
 			String b = mc.initialResult();
 			carregar(b);
-			//ideia.setText(b);
-			
 		}catch(Exception ex){			
 		}
 	}
@@ -127,19 +128,14 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			String b = mc.previousResult();
 			if(!b.equals(""))
 				carregar(b);
-				//ideia.setText(b);
-		}catch(Exception ex){			
-		}		
+		}catch(Exception ex){}		
 	}
 	
 	public static void carregarIdeia(int id){
 		try{
 			String b = mc.currentResultId(id);
 			carregar(b);
-			//ideia.setText(b);
-		}catch(Exception ex){
-			
-		}
+		}catch(Exception ex){}
 	}
 	
 	@SuppressLint("DefaultLocale")
@@ -169,6 +165,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		}else
 			ll.setBackgroundColor(Color.parseColor("#FFFFFF"));
 		
+		tagMax.setText("Tag Max: "+mc.getTagMax());	
 		tagView.setText("Tag: "+mc.getTagAtual());		
 	}
 	
@@ -184,10 +181,14 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		int id = item.getItemId();		
 		int a;
 		switch (id) {
-		case R.id.item1:					
-			mc.armazenarPositionDoCursor();//esse método armazena a posição do Cursor, antes de chamar a próxima tela 			
-			Intent it = new Intent(this, MainView2.class);//Criando a intenção de chamar a próxima classe/Tela
-			startActivity(it);//Inicia o método onCreate da classe MainView2			
+		case R.id.item1:		
+			try{
+			//mc.armazenarPositionDoCursor();//esse método armazena a posição do Cursor, antes de chamar a próxima tela 			
+			Intent it = new Intent(context, MainView2.class);//Criando a intenção de chamar a próxima classe/Tela
+			startActivity(it);//Inicia o método onCreate da classe MainView2
+			}catch(Exception e){
+				
+			}
 			break;
 		case R.id.item2:
 			a = mc.armazenarPositionDoCursor();
@@ -292,18 +293,22 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	@Override
 	protected void onPause(){
 		super.onPause();
-		int posicao = mc.armazenarPositionDoCursor();
-		GuardadorDeEstadosTemplate gd = new GuardadorDeEstadosTemplate();
-		gd.guardarEstado("posicao", posicao, this);
-		if(mc.getTipoDeQuery()==4 || mc.getTipoDeQuery()==-1)
-			gd.guardarEstado("tipoSql", 3, this);
-		else
-			gd.guardarEstado("tipoSql", mc.getTipoDeQuery(), this);
-		gd.guardarEstado("minId", mc.getCurrentIdMin(), this);
-		gd.guardarEstado("maxId", mc.getCurrentIdMax(), this);
-		gd.guardarEstado("currentId", mc.getCurrentId(), this);
-		gd.guardarEstado("tag", JanelaDeTags.tagCarregada, this);
-		gd.guardarEstado("morto", mc.getMorto(), this);
+		try{
+			int posicao = mc.armazenarPositionDoCursor();
+			GuardadorDeEstadosTemplate gd = new GuardadorDeEstadosTemplate();
+			gd.guardarEstado("posicao", posicao, this);
+			if(mc.getTipoDeQuery()==4 || mc.getTipoDeQuery()==-1)
+				gd.guardarEstado("tipoSql", 3, this);
+			else
+				gd.guardarEstado("tipoSql", mc.getTipoDeQuery(), this);
+				gd.guardarEstado("minId", mc.getCurrentIdMin(), this);
+				gd.guardarEstado("maxId", mc.getCurrentIdMax(), this);
+				gd.guardarEstado("currentId", mc.getCurrentId(), this);
+				gd.guardarEstado("tag", JanelaDeTags.tagCarregada, this);
+				gd.guardarEstado("morto", mc.getMorto(), this);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -318,21 +323,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	@Override
 	protected void onDestroy(){
 		super.onDestroy();
-		try{
-			int posicao = mc.armazenarPositionDoCursor();
-			GuardadorDeEstadosTemplate gd = new GuardadorDeEstadosTemplate();
-			gd.guardarEstado("posicao", posicao, this);
-			if(mc.getTipoDeQuery()==4 || mc.getTipoDeQuery()==-1)
-				gd.guardarEstado("tipoSql", 3, this);
-			else
-				gd.guardarEstado("tipoSql", mc.getTipoDeQuery(), this);
-			gd.guardarEstado("minId", mc.getCurrentIdMin(), this);
-			gd.guardarEstado("maxId", mc.getCurrentIdMax(), this);
-			gd.guardarEstado("currentId", mc.getCurrentId(), this);
-			gd.guardarEstado("tag", JanelaDeTags.tagCarregada, this);
-			gd.guardarEstado("morto", mc.getMorto(), this);
-			mc.fecharConexao();
-		}catch(Exception ex){}
+		
 	}
 	
 	/**
@@ -349,12 +340,19 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			mc.setMinId(gd.restaurarEstado("minId", this));
 			mc.setTipoDeQuery(gd.restaurarEstado("tipoSql", this));	
 			mc.setTag(gd.restaurarEstado("tag", this));
+			mc.setMorto(gd.restaurarEstado2("morto", this));
 //			if(mc.checarPosition()){ //método para checar a posição do Cursor
 //				//método que faz select e atualiza o Cursor
 //				mc.atualizarCursor(TABELA);				
 //			}							
-			if(a!=-1){
+			if(mc.getTipoDeQuery()==2 && mc.getMaxId()!=-1 && mc.getMinId()!=-1 || mc.getTipoDeQuery()==3
+					&& mc.getMaxId()!=-1 && mc.getMinId()!=-1){
+				mc.retornarTodosResultados("memoria");
+			}else if(a!=-1){
 				carregarIdeia(a);
+			}else{
+				loadIdeias();
+				carregarFirst();
 			}
 		}catch(Exception ex){}		
 	}
@@ -366,7 +364,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	protected void onStart(){
 		super.onStart();
 		try{
-			mc.abrirConexao();			
+			//mc.abrirConexao();			
 		}catch(Exception ex){}
 	}
 	

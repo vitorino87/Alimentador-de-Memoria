@@ -26,4 +26,12 @@ public class GuardadorDeEstadosTemplate {
 		int value = sharedPref.getInt(key, defaultValue);
 		return value;
 	}
+	
+	public String restaurarEstado2(String key, Activity ac){
+		SharedPreferences sharedPref = ac.getPreferences(Context.MODE_PRIVATE);
+		String defaultValue = "";
+		String value = sharedPref.getString(key, defaultValue);
+		return value;		
+	}
+	
 }
