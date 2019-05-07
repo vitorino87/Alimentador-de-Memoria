@@ -45,4 +45,26 @@ public class FormatadorDeTexto implements TextWatcher {
 			//filterArray[2] = new InputFilter.LengthFilter(75);
 			//filterArray[3] = new InputFilter.LengthFilter(100);
 			//txtIdeia.setFilters(filterArray);	
+	
+	public String formatInputText(String text){
+		char c = 13;
+		char d = 10;
+		if(text.contains(""+d))
+			text = text.replace(""+d, "\\\\n");
+		return text;
+	}
+	
+	public String formatOutputText(String text){
+		char a = '\n';
+		if(text.contains("\\\\n"))
+			text = text.replace("\\\\n", ""+a);
+		else if(text.contains("\\n"))
+			text = text.replace("\\n", ""+a);						
+		else if(text.contains("\n"))
+			text = text.replace("\n", ""+a);
+		
+		
+		
+		return text;
+	}
 }

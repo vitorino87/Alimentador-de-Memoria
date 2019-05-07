@@ -27,10 +27,10 @@ public class JanelaDeTags {
 	Menu menu;
 	private int a;
 	MenuDoMainView mmv;
-	static private int tagCarregada;
+	static int tagCarregada = 0;
 	Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,btn0,btnApagar;
 	EditText edt;
-	static boolean checarMenu=false;
+	static boolean checarMenu=false;             //serve para evitar que seja adicionado vários menus ao menu principal
 		
 	public int getTag() {
 		return tag;
@@ -164,26 +164,31 @@ public class JanelaDeTags {
 	            		   mc.addOrChangeTag(tabela, ideia, tag);	 
 	            		   MainView.tagMax.setText("Tag Max: "+mc.getTagMax());
 	            		   if(choose==0){
-	            			   Toast.makeText(ac, "Adicionado na tag "+tag, Toast.LENGTH_LONG).show();
-	            		   	   mc.retornarTodosResultados(tabela, "n", "0");
+	            			   Toast.makeText(ac, "Adicionado na tag "+tag, Toast.LENGTH_SHORT).show();
+	            			   mc.setMorto("n");
+	            			   mc.setTipoDeQuery(4);
+	            		   	   mc.retornarTodosResultados(tabela);
 	            		   	   mc.goToPositionCursor(a-1);	            		   	   
 	            		   }else{	            			   
-	            			   Toast.makeText(ac, "Alterado para tag " +tag, Toast.LENGTH_LONG).show();
-	            			   mc.retornarTodosResultados(tabela, "", String.valueOf(tagCarregada));
+	            			   Toast.makeText(ac, "Alterado para tag " +tag, Toast.LENGTH_SHORT).show();
+	            			   mc.setTipoDeQuery(2);
+	            			   mc.setTag(tagCarregada);
+	            			   mc.retornarTodosResultados(tabela);
 	            			   if(mc.initialResult()!=""){
 	            				   mc.goToPositionCursor(a-1);	            				   
 	            			   }else{
 	            				   menu.clear();
 	            				   checarMenu = false;
 	            				   mmv.chamarMenuInicial(R.menu.menu);
-	            				   mc.retornarTodosResultados(tabela, "n", "0");	            				   
+	            				   mc.setMorto("n");
+	            				   mc.setTipoDeQuery(4);
+	            				   mc.retornarTodosResultados(tabela);	            				   
 	            				   Toast.makeText(ac, "Retornou porque não há mais tag "+tagCarregada, Toast.LENGTH_LONG).show();
 	            			   }	            			   
 	            		   }
 	            		   MainView.carregarIdeia();
 	            		   
 					} catch (NumberFormatException e) {
-						// TODO Auto-generated catch block
 						Toast.makeText(ac, "Não foi possível adicionar a tag", Toast.LENGTH_LONG).show();
 						e.printStackTrace();
 					}
@@ -204,21 +209,28 @@ public class JanelaDeTags {
 	               @Override
 	               public void onClick(DialogInterface dialog, int id) {    
 	            	   int a = mc.armazenarPositionDoCursor();   //armazenado a posição atual do cursor
-	            	   tagCarregada = Integer.parseInt(((EditText) layout.findViewById(R.id.editTextTag)).getText().toString()); 	            	   
-	            	   mc.retornarTodosResultados(tabela,"",String.valueOf(tagCarregada));
+	            	   tagCarregada = Integer.parseInt(((EditText) layout.findViewById(R.id.editTextTag)).getText().toString()); 	
+	            	   mc.setTag(tagCarregada);
+	            	   mc.setTipoDeQuery(2);
+	            	   mc.setMaxId(mc.getIdMaxDB());
+	            	   mc.setMinId(0);
+	            	   mc.retornarTodosResultados(tabela);
 	            	   if(mc.initialResult()!=""){
 	            		   Toast.makeText(ac, "Carregada tag "+tagCarregada, Toast.LENGTH_LONG).show();	            		   	            		              		 
 	            		   //menu.clear();	          
 	            		   if(!checarMenu){
 	            			   mmv.chamarMenuInicial(R.menu.menutags);
+	            			   menu.removeItem(R.id.item8);
 	            			   checarMenu = true;
 	            		   }
 	            	   }else{
 	            		   Toast.makeText(ac, "Não foi possível carregar a tag", Toast.LENGTH_LONG).show();
-	            		   mc.retornarTodosResultados(tabela, "n", "0");
+	            		   mc.setMorto("n");
+	            		   mc.setTipoDeQuery(4);
+	            		   mc.retornarTodosResultados(tabela);
 	            		   mc.goToPositionCursor(a-1);			//utilizando a posição atual do cursor
 	            	   }
-	            	   MainView.carregarIdeia(); 
+	            	   MainView.carregarFirst(); 
 	               }
 	           })
 	           .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {

@@ -52,7 +52,7 @@ public class MainView2 extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				ImportadorPreliminar it = new ImportadorPreliminar(MainView2.this);		
 				exportarOuImportar = it.abrirArquivo();
 			}
@@ -62,7 +62,7 @@ public class MainView2 extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				ExportadorTemplate et = new ExportadorTemplate(MainView2.this); //instanciando o Exportador
 				exportarOuImportar = et.salvarComo();  //salvando o arquivo onde será exportado a informação desejada
 			}
@@ -74,8 +74,10 @@ public class MainView2 extends Activity {
 			public void onClick(View v) {
 				mc = new ControladorDoDB(context);// instancia um MainControl com o contexto atual
 				mc.abrirConexao();// abre a conexão com o banco
-				String ideia = txtIdeia.getText().toString();// adiciona o texto adicionado pelo usuário na variável ideia
+				String ideia = txtIdeia.getText().toString();// adiciona o texto adicionado pelo usuário na variável ideia				
 				ideia = ideia.replace(",", "\u0375");
+				FormatadorDeTexto ft = new FormatadorDeTexto();
+				ideia = ft.formatInputText(ideia);
 				if (!ideia.equals("")) { // se ideia não for ""
 					Long l = mc.inserirRow(ideia,"n", TABELA,0); // insere no DB a string ideia na tabela memoria
 					if (l > -1) { // se o método anterior retornar um valor maior que -1
@@ -93,11 +95,13 @@ public class MainView2 extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				mc = new ControladorDoDB(context);// instancia um MainControl com o contexto atual
 				mc.abrirConexao();// abre a conexão com o banco
 				String ideia = txtIdeia.getText().toString();// adiciona o texto adicionado pelo usuário na variável ideia
 				ideia = ideia.replace(",", "\u0375");
+				FormatadorDeTexto ft = new FormatadorDeTexto();
+				ideia = ft.formatInputText(ideia);
 				if (!ideia.equals("")) { // se ideia não for ""
 					Boolean l = mc.deletarRow(ideia, TABELA); // delete no DB a string ideia na tabela memoria
 					if (l) { // se return true
