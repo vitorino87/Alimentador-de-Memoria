@@ -92,11 +92,11 @@ public class ControladorDoDB {
 	}
 
 	// Recupera o Cursor máximo
-	public int buscarIdMax() {
-		cursor = banco.buscarIdMax(db);
-		int a = cursor.getInt(0);
-		return a;
-	}
+//	public int buscarIdMax() {
+//		cursor = banco.buscarIdMax(db);
+//		int a = cursor.getInt(0);
+//		return a;
+//	}
 	
 	public int getIdMaxDB(){
 		return banco.getMaxId(db);

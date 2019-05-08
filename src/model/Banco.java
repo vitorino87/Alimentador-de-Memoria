@@ -82,22 +82,22 @@ public class Banco extends SQLiteOpenHelper
 	 * @param db - SQLiteDatabase que irá receber o método
 	 * @return um Cursor com a row com maior id
 	 */
-	public Cursor buscarIdMax(SQLiteDatabase db)
-	{
-		Cursor c = null;
-		try{
-			String [] s = new String[]{"questao.id","questao.enunciado",
-					"questao.itemA","questao.itemB","questao.itemC","questao.itemD"
-					,"questao.itemE","questao.gabarito"};
-			//c = db.query("questao", s, null, null, null, null, "questao.id desc");
-			c = db.rawQuery("select * from questao order by questao.id desc limit 1", null);
-			//int idMax = Integer.parseInt(c.moveToLast());
-			c.moveToFirst();
-			return c;
-		}catch(Exception ex){
-			return null;
-		}
-	}
+//	public Cursor buscarIdMax(SQLiteDatabase db)
+//	{
+//		Cursor c = null;
+//		try{
+//			String [] s = new String[]{"questao.id","questao.enunciado",
+//					"questao.itemA","questao.itemB","questao.itemC","questao.itemD"
+//					,"questao.itemE","questao.gabarito"};
+//			//c = db.query("questao", s, null, null, null, null, "questao.id desc");
+//			c = db.rawQuery("select * from questao order by questao.id desc limit 1", null);
+//			//int idMax = Integer.parseInt(c.moveToLast());
+//			c.moveToFirst();
+//			return c;
+//		}catch(Exception ex){
+//			return null;
+//		}
+//	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

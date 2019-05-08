@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
@@ -23,7 +22,6 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 import controller.ControladorDoDB;
@@ -47,7 +45,6 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	int minId = 0;
 	int maxId = 0;
 	int currentId =0;
-	PopupMenu popupMenu;
 	
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -62,8 +59,6 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		ideia = (EditText)findViewById(R.id.editText1);//conecta o editText1 a variável ideia
 		tagView = (TextView) findViewById(R.id.textView1);
 		tagMax = (TextView)findViewById(R.id.tagMax);
-		//popupMenu = new PopupMenu(context,null);
-		//menu2 = popupMenu.getMenu();
 		
 		//método para adicionar a ação de Touch no LinearLayout
 		ll.setOnTouchListener(new OnTouchListener() {			
