@@ -301,6 +301,30 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	@Override
 	protected void onPause(){
 		super.onPause();
+//		try{
+//			int posicao = mc.armazenarPositionDoCursor();
+//			GuardadorDeEstadosTemplate gd = new GuardadorDeEstadosTemplate();
+//			gd.guardarEstado("posicao", posicao, this);
+//			if(mc.getTipoDeQuery()==4 || mc.getTipoDeQuery()==-1)
+//				gd.guardarEstado("tipoSql", 3, this);
+//			else
+//				gd.guardarEstado("tipoSql", mc.getTipoDeQuery(), this);
+//				gd.guardarEstado("minId", mc.getCurrentIdMin(), this);
+//				gd.guardarEstado("maxId", mc.getCurrentIdMax(), this);
+//				gd.guardarEstado("currentId", mc.getCurrentId(), this);
+//				gd.guardarEstado("tag", JanelaDeTags.tagCarregada, this);
+//				gd.guardarEstado("morto", mc.getMorto(), this);
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}
+	}
+	
+	/**
+	 * Método de stop
+	 */
+	@Override
+	protected void onStop(){
+		super.onStop();
 		try{
 			int posicao = mc.armazenarPositionDoCursor();
 			GuardadorDeEstadosTemplate gd = new GuardadorDeEstadosTemplate();
@@ -317,13 +341,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * Método de stop
-	 */
-	@Override
-	protected void onStop(){super.onStop();}
+		}
 	
 	/**
 	 * Método que ocorre ao fechar app
@@ -353,6 +371,8 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 					&& mc.getMaxId()!=-1 && mc.getMinId()!=-1){	
 				mc.retornarTodosResultados("memoria");
 				mc.nextResult();
+				if(menu!=null)
+					onCreateOptionsMenu(menu);
 				if(a==-1){
 					mc.getCursor().moveToFirst();
 					mc.initialResult();
