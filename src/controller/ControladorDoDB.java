@@ -232,7 +232,8 @@ public class ControladorDoDB {
 	}
 	
 	public String nextResult(){
-		String b="";				
+		String b="";			
+		try{
 		if(!cursor.isLast())
 			cursor.moveToNext();
 		else if(getCurrentId()<banco.getMaxId(db)+1){
@@ -253,7 +254,8 @@ public class ControladorDoDB {
 			//cursor.moveToPosition(0);
 		}
 					
-		b = cursor.getString(1);			
+		b = cursor.getString(1);	
+		}catch(Exception e){}
 		return b;
 	}
 	
@@ -388,5 +390,9 @@ public class ControladorDoDB {
 		}else{
 			return false;
 		}
+	}
+
+	public int getIdMinDB() {
+		return banco.getMinId(db);
 	}
 }

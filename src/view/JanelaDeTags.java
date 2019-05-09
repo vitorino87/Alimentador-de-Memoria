@@ -148,6 +148,8 @@ public class JanelaDeTags {
 		});
 	    String msg[] = {"Adicionar tag","Alterar para tag","Carregar tag..."};
 	    mmv = new MenuDoMainView(ac, menu);
+	    mc.setMinId(mc.getCurrentIdMin()); //serve só para garantir que tenha algo em minId e maxId
+	    mc.setMaxId(mc.getCurrentIdMax());
 	    switch(choose){
 		case 0:
 		case 1:
@@ -159,35 +161,44 @@ public class JanelaDeTags {
 	               public void onClick(DialogInterface dialog, int id) {            	                     
 	            	   try { 	    	            		   
 	            		   a = mc.armazenarPositionDoCursor();
-	            		   //int tag = Integer.parseInt(((EditText) layout.findViewById(R.id.editTextTag)).getText().toString());
 	            		   int tag = Integer.parseInt(edt.getText().toString());
+	            		   int a = mc.getCurrentId();											//captura o id atual
 	            		   mc.addOrChangeTag(tabela, ideia, tag);	 
-	            		   MainView.tagMax.setText("Tag Max: "+mc.getTagMax());
-	            		   if(choose==0){
-	            			   Toast.makeText(ac, "Adicionado na tag "+tag, Toast.LENGTH_SHORT).show();
-	            			   mc.setMorto("n");
-	            			   mc.setTipoDeQuery(4);
-	            		   	   mc.retornarTodosResultados(tabela);
-	            		   	   mc.goToPositionCursor(a-1);	            		   	   
+	            		   MainView.tagMax.setText("Tag Max: "+mc.getTagMax());	            		   
+	            		   if(choose==0){	            		
+	            			   mc.setMinId(a-2);
+	            			   if(mc.getMinId()<0)
+		            			   mc.setMinId(0);
+		            		   mc.setMaxId(a+2);
+		            		   mc.setMorto("n");
+		            		   mc.setTipoDeQuery(3);
+	            			   mc.retornarTodosResultados(tabela);
+	            			   MainView.carregarIdeia(a);
+	            			   MainView.tagView.setText("Tag: "+mc.getTagAtual());
+	            			   Toast.makeText(ac, "Adicionado na tag "+tag, Toast.LENGTH_SHORT).show();	            			   	            		   	   
 	            		   }else{	            			   
 	            			   Toast.makeText(ac, "Alterado para tag " +tag, Toast.LENGTH_SHORT).show();
 	            			   mc.setTipoDeQuery(2);
-	            			   mc.setTag(tagCarregada);
-	            			   mc.retornarTodosResultados(tabela);
-	            			   if(mc.initialResult()!=""){
-	            				   mc.goToPositionCursor(a-1);	            				   
-	            			   }else{
-	            				   menu.clear();
-	            				   checarMenu = false;
-	            				   mmv.chamarMenuInicial(R.menu.menu);
-	            				   mc.setMorto("n");
-	            				   mc.setTipoDeQuery(4);
-	            				   mc.retornarTodosResultados(tabela);	            				   
-	            				   Toast.makeText(ac, "Retornou porque não há mais tag "+tagCarregada, Toast.LENGTH_LONG).show();
-	            			   }	            			   
-	            		   }
-	            		   MainView.carregarIdeia();
-	            		   
+	            			   mc.setTag(tagCarregada);	            			   
+	            			   mc.setMinId(a);
+	            			   mc.setMaxId(mc.getIdMaxDB());
+	            			   mc.retornarTodosResultados(tabela);	
+	            			   if(mc.getCursor().getCount()<=0){
+	            				   mc.setMinId(mc.getIdMinDB());
+	            				   mc.setMaxId(a);
+	            				   mc.retornarTodosResultados(tabela);
+	            				   if(mc.getCursor().getCount()<=0){
+		            				   menu.clear();
+		            				   checarMenu = false;
+		            				   mmv.chamarMenuInicial(R.menu.menu);
+		            				   mc.setMorto("n");
+		            				   mc.setTipoDeQuery(4);
+		            				   mc.retornarTodosResultados(tabela);	            				   
+		            				   Toast.makeText(ac, "Retornou porque não há mais tag "+tagCarregada, Toast.LENGTH_LONG).show();
+		            			   }
+	            			   }
+	            			   MainView.carregarFirst();	            			   	            			   	            			   
+	            		   }            		   	            		   
 					} catch (NumberFormatException e) {
 						Toast.makeText(ac, "Não foi possível adicionar a tag", Toast.LENGTH_LONG).show();
 						e.printStackTrace();
@@ -208,29 +219,33 @@ public class JanelaDeTags {
 			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 	               @Override
 	               public void onClick(DialogInterface dialog, int id) {    
-	            	   int a = mc.armazenarPositionDoCursor();   //armazenado a posição atual do cursor
-	            	   tagCarregada = Integer.parseInt(((EditText) layout.findViewById(R.id.editTextTag)).getText().toString()); 	
+	            	   int a = mc.getCurrentId();   //armazenado o id atual
+	            	   tagCarregada = Integer.parseInt(((EditText) layout.findViewById(R.id.editTextTag)).getText().toString());	            	   
 	            	   mc.setTag(tagCarregada);
 	            	   mc.setTipoDeQuery(2);
 	            	   mc.setMaxId(mc.getIdMaxDB());
 	            	   mc.setMinId(0);
 	            	   mc.retornarTodosResultados(tabela);
 	            	   if(mc.initialResult()!=""){
-	            		   Toast.makeText(ac, "Carregada tag "+tagCarregada, Toast.LENGTH_LONG).show();	            		   	            		              		 
-	            		   //menu.clear();	          
+	            		   Toast.makeText(ac, "Carregada tag "+tagCarregada, Toast.LENGTH_LONG).show();	            		   	            		              		 	          
 	            		   if(!checarMenu){
 	            			   mmv.chamarMenuInicial(R.menu.menutags);
 	            			   menu.removeItem(R.id.item8);
+	            			   menu.removeItem(R.id.item2);
 	            			   checarMenu = true;
 	            		   }
+	            		   MainView.carregarFirst();
 	            	   }else{
-	            		   Toast.makeText(ac, "Não foi possível carregar a tag", Toast.LENGTH_LONG).show();
+	            		   Toast.makeText(ac, "Não foi possível carregar a tag", Toast.LENGTH_LONG).show();	
+	            		   mc.setMinId(a-2);
+	            		   if(mc.getMinId()<0)
+	            			   mc.setMinId(0);
+	            		   mc.setMaxId(a+2);
 	            		   mc.setMorto("n");
-	            		   mc.setTipoDeQuery(4);
+	            		   mc.setTipoDeQuery(3);
 	            		   mc.retornarTodosResultados(tabela);
-	            		   mc.goToPositionCursor(a-1);			//utilizando a posição atual do cursor
+	            		   MainView.carregarIdeia(a);			//utilizando a posição atual do cursor
 	            	   }
-	            	   MainView.carregarFirst(); 
 	               }
 	           })
 	           .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {

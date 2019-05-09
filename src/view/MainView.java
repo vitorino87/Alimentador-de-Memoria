@@ -40,7 +40,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	static boolean isColored = true;
 	private static String bkp = "";
 	private JanelaDeTags jt;
-	private static TextView tagView = null;
+	static TextView tagView = null;
 	static TextView tagMax;	
 	int minId = 0;
 	int maxId = 0;
@@ -205,21 +205,37 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			}
 			break;
 		case R.id.item3:
+			int tipoQuery = mc.getTipoDeQuery();	
+			int idCurrent = mc.getCurrentId();
+			int tagAtual = mc.getTagAtual();
 			mc.setTipoDeQuery(3);
 			mc.setMorto("s");
 			mc.retornarTodosResultados(TABELA);
-			if(mc.getCursor().moveToFirst()){					
+			if(mc.getCursor().getCount()<=0){
+				Toast.makeText(context, "Não há Dead Files", Toast.LENGTH_LONG).show();
+				if(tipoQuery==2){
+					mc.setTipoDeQuery(2);
+					mc.setTag(tagAtual);
+					mc.setMinId(idCurrent-2);
+					mc.setMaxId(idCurrent+2);
+					mc.retornarTodosResultados(TABELA);
+					carregarIdeia(idCurrent);
+				}else if(tipoQuery==3){
+					mc.setTipoDeQuery(3);
+					mc.setMorto("n");
+					mc.setMinId(idCurrent-2);
+					mc.setMaxId(idCurrent+2);
+					mc.retornarTodosResultados(TABELA);
+					carregarIdeia(idCurrent);
+				}
+			}else{								
 				Toast.makeText(context, "Dead Files", Toast.LENGTH_LONG).show();				
 				menu.clear();
 				MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
 			    mmv.chamarMenuInicial(R.menu.menu2);
 			    carregarFirst();
-			    //carregarIdeia();
-			}else{
-				Toast.makeText(context, "Não há Dead Files", Toast.LENGTH_LONG).show();					
 			}
 			break;		
-			
 		case R.id.item4:			
 			if (item.isChecked()) item.setChecked(false);
             else item.setChecked(true);			
@@ -261,8 +277,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 			isColored=item.isChecked();		
 			break;			
 		case R.id.item8:			
-			jt.onCreateDialog(0).show();	
-			//mc.addOrChangeTag(TABELA, ideia.getText().toString(), jt.getTag());
+			jt.onCreateDialog(0).show();			
 			break;			
 		case R.id.itemVisualizarItensTag:
 			jt.onCreateDialog(2).show();
@@ -279,15 +294,16 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	}
 	
 	public void retornar(){
-		mc.setMorto("n");
-		mc.setTipoDeQuery(3);
-		mc.setMinId(0);
-		mc.setMaxId(350);
-		mc.retornarTodosResultados(TABELA);			
-		carregarIdeia();
+//		mc.setMorto("n");
+//		mc.setTipoDeQuery(3);
+//		mc.setMinId(mc.getIdMinDB());
+//		mc.setMaxId(mc.getMinId()+6);
+//		mc.retornarTodosResultados(TABELA);	
 		menu.clear();
 		MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	   
 	    mmv.chamarMenuInicial(R.menu.menu);
+	    loadIdeias();
+		carregarFirst();
 	}
 		
 	/**
@@ -411,6 +427,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	    			mmv.chamarMenuInicial(R.menu.menu);
 	    			mmv.chamarMenuInicial(R.menu.menutags);
 	    			menu.removeItem(R.id.item8);
+	    			menu.removeItem(R.id.item2);
 	    			JanelaDeTags.checarMenu = true;
 	    		}else{
 	    			mmv.chamarMenuInicial(R.menu.menu);
