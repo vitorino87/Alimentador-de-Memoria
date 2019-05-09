@@ -403,13 +403,11 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	public boolean onCreateOptionsMenu(Menu menu) {	    	    
 	    MenuDoMainView mmv = new MenuDoMainView(MainView.this, menu);	
 	    this.menu = menu;
-	    boolean b = true;
+	    menu.clear();
 	    try{	    	
 	    	switch(mc.getTipoDeQuery()){
 	    	case 2:
-	    		if(mc.getTipoDeQuery()==2 && mc.getMaxId()!=-1 && mc.getMinId()!=-1){
-	    			menu.clear();
-	    			mmv = new MenuDoMainView(MainView.this, menu);
+	    		if(mc.getTipoDeQuery()==2 && mc.getMaxId()!=-1 && mc.getMinId()!=-1){	    			
 	    			mmv.chamarMenuInicial(R.menu.menu);
 	    			mmv.chamarMenuInicial(R.menu.menutags);
 	    			menu.removeItem(R.id.item8);
@@ -419,23 +417,19 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	    		}
 	    		break;
 	    	case 3:
-	    		if(mc.getTipoDeQuery()==3 && mc.getMorto().equals("s") && mc.getMaxId()!=-1 && mc.getMinId()!=-1){
-	    			menu.clear();	    			
-	    			mmv = new MenuDoMainView(MainView.this, menu);	   
+	    		if(mc.getTipoDeQuery()==3 && mc.getMorto().equals("s") && mc.getMaxId()!=-1 && mc.getMinId()!=-1){	    			   
 	    			mmv.chamarMenuInicial(R.menu.menu2);
 	    		}else{
-	    			menu.clear();
 	    			mmv.chamarMenuInicial(R.menu.menu);
 	    		}
 	    		break;	    		    		
 	    	default:
-	    		menu.clear();
 	    		mmv.chamarMenuInicial(R.menu.menu);
 	    		break;
 	    	}
 		}catch(Exception e){
 				
 		}
-	    return b;
+	    return true;
 	}
 }
