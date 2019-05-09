@@ -89,9 +89,10 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	public static void loadIdeias(){
 		try{
 			mc.setMorto("n");
-			mc.setTipoDeQuery(4);
-			mc.retornarTodosResultados("memoria");
+			mc.setMinId(mc.getIdMinDB());
+			mc.setMaxId(mc.getMinId()+5);
 			mc.setTipoDeQuery(3);
+			mc.retornarTodosResultados("memoria");
 		}catch(Exception e){
 			
 		}

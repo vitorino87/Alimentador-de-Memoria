@@ -99,6 +99,7 @@ public class ControladorDoDB {
 //	}
 	
 	public int getIdMaxDB(){
+		abrirConexao();
 		return banco.getMaxId(db);
 	}
 
@@ -218,6 +219,7 @@ public class ControladorDoDB {
 		
 	
 	public int getTagMax(){
+		abrirConexao();
 		return banco.getTagMax(db);
 	}
 	
@@ -344,6 +346,7 @@ public class ControladorDoDB {
 	}
 	
 	public boolean deletarRow(String ideia, String tabela){
+		abrirConexao();
 		if(banco.deletarIdeia(ideia, db, tabela)>0){
 			return true;
 		}{
@@ -393,6 +396,7 @@ public class ControladorDoDB {
 	}
 
 	public int getIdMinDB() {
+		abrirConexao();
 		return banco.getMinId(db);
 	}
 }
