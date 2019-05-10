@@ -371,6 +371,15 @@ public class ControladorDoDB {
 		return a;
 	}
 	
+	public int atualizarDB2(ContentValues cv, String tabela, int id){
+		abrirConexao();		
+		int a = banco.atualizarIdeia2(db, cv, tabela, id);
+		if(a!=-2){
+			//cursor = null;
+		}
+		return a;
+	}
+	
 	public int addOrChangeTag(String tabela, String ideia, int tag){
 		ContentValues cv = new ContentValues();
 		cv.put("tag", tag);

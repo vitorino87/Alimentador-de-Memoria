@@ -222,6 +222,16 @@ public class Banco extends SQLiteOpenHelper
 		return a;
 	}
 	
+	public int atualizarIdeia2(SQLiteDatabase db, ContentValues novoValor, String tabela, int id){
+		int a = -2;
+		try{
+			String[] args = {String.valueOf(id)};
+			a=db.update(tabela, novoValor, "id=?", args);			
+		}catch(Exception e){			
+		}
+		return a;
+	}
+	
 	public int getTagMax(SQLiteDatabase db){
 		Cursor c = null;
 		int a = -1;		

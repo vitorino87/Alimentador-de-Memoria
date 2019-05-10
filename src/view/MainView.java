@@ -45,6 +45,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	int minId = 0;
 	int maxId = 0;
 	int currentId =0;
+	AlteradorDeIdeia ai;
 	
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -181,6 +182,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		jt = new JanelaDeTags(MainView.this, mc, TABELA, ideia.getText().toString(),menu);
+		ai = new AlteradorDeIdeia(MainView.this , mc , TABELA);
 		int id = item.getItemId();		
 		int a;
 		switch (id) {
@@ -289,6 +291,13 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 		case R.id.itemTagRetornar:
 			retornar();
 			JanelaDeTags.checarMenu = false;
+			break;
+		case R.id.itemAtualizar:
+//			Intent it = new Intent(context, MainView2.class);//Criando a intenção de chamar a próxima classe/Tela
+//			startActivity(it);
+			ai.setId(mc.getCurrentId());
+			ai.setText(ideia.getText().toString());
+			ai.onCreateDialog().show();
 			break;
 		}		
 		return super.onOptionsItemSelected(item);

@@ -58,10 +58,10 @@ public class FormatadorDeTexto implements TextWatcher {
 		char a = '\n';
 		if(text.contains("\\\\n"))
 			text = text.replace("\\\\n", ""+a);
-		else if(text.contains("\\n"))
-			text = text.replace("\\n", ""+a);						
-		else if(text.contains("\n"))
-			text = text.replace("\n", ""+a);
+//		else if(text.contains("\\n"))
+//			text = text.replace("\\n", ""+a);						
+//		else if(text.contains("\n"))
+//			text = text.replace("\n", ""+a);
 		
 		
 		
