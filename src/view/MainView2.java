@@ -121,7 +121,7 @@ public class MainView2 extends Activity {
 			@Override
 			public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop,
 					int oldRight, int oldBottom) {
-				setPixelAnterior(alterarTamanhoTexto(v, bottom, oldBottom, ew));//invocando o método para alterar tamanho texto
+				//setPixelAnterior(alterarTamanhoTexto(v, bottom, oldBottom, ew));//invocando o método para alterar tamanho texto
 			}
 		});		
 				
@@ -234,7 +234,7 @@ public class MainView2 extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		try {
-			mc.fecharConexao();
+			//mc.fecharConexao();
 		} catch (Exception ex) {}
 	}
 
