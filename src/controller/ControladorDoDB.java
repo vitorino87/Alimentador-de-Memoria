@@ -236,8 +236,14 @@ public class ControladorDoDB {
 	public String nextResult(){
 		String b="";			
 		try{
-		if(!cursor.isLast())
+		if(!cursor.isLast() && getCurrentId()!=-1)
 			cursor.moveToNext();
+		else if(getCurrentId()==-1){
+			minId = 0;
+			maxId = banco.getMaxId(db)+1;
+			retornarTodosResultados("memoria");
+			cursor.moveToFirst();
+		}
 		else if(getCurrentId()<banco.getMaxId(db)+1){
 			minId = getCurrentIdMax()+1;
 			maxId = banco.getMaxId(db)+1;                //(fixado)
@@ -248,16 +254,16 @@ public class ControladorDoDB {
 				retornarTodosResultados("memoria");
 			}
 			cursor.moveToFirst();
-		}else{
+		}else{			
+			//cursor.moveToPosition(0);
+		}							
+		}catch(Exception e){
 			minId = 0;
 			maxId = banco.getMaxId(db)+1;
 			retornarTodosResultados("memoria");
-			cursor.moveToFirst();
-			//cursor.moveToPosition(0);
+			cursor.moveToFirst();			
 		}
-					
 		b = cursor.getString(1);	
-		}catch(Exception e){}
 		return b;
 	}
 	

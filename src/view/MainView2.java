@@ -86,7 +86,7 @@ public class MainView2 extends Activity {
 						Toast.makeText(context, "Ideia já existe ou não pode ser salva!", Toast.LENGTH_SHORT).show();
 					}
 				}
-				mc.fecharConexao(); // fecha a conexão
+				//mc.fecharConexao(); // fecha a conexão
 				txtIdeia.setText("");// limpa a tela
 			}
 		});
@@ -110,7 +110,7 @@ public class MainView2 extends Activity {
 						Toast.makeText(context, "Ideia não existe ou não pode ser removida!", Toast.LENGTH_SHORT).show();
 					}
 				}
-				mc.fecharConexao(); // fecha a conexão
+				//mc.fecharConexao(); // fecha a conexão
 				txtIdeia.setText("");// limpa a tela
 
 			}
@@ -235,6 +235,7 @@ public class MainView2 extends Activity {
 		super.onDestroy();
 		try {
 			//mc.fecharConexao();
+			
 		} catch (Exception ex) {}
 	}
 

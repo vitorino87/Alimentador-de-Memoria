@@ -322,6 +322,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	@Override
 	protected void onPause(){
 		super.onPause();
+		
 //		try{
 //			int posicao = mc.armazenarPositionDoCursor();
 //			GuardadorDeEstadosTemplate gd = new GuardadorDeEstadosTemplate();
@@ -414,7 +415,7 @@ public class MainView extends TelaTemplate implements OnTouchListener, OnGesture
 	protected void onStart(){
 		super.onStart();
 		try{
-			//mc.abrirConexao();			
+			//onResume();			
 		}catch(Exception ex){}
 	}
 	
